@@ -10,6 +10,8 @@ before_install:
   - go get github.com/golang/lint/golint
   - go get github.com/stretchr/testify/assert
   - go get github.com/gordonklaus/ineffassign
+
+install: go get -t -v $(go list ./... | grep -v /internal/)
   
 script:
   - gofiles=$(find ./ -name '*.go') && [ -z "$gofiles" ] || unformatted=$(goimports -l $gofiles) && [ -z "$unformatted" ] || (echo >&2 "Go files must be formatted with gofmt. Following files has problem:\n $unformatted" && false)
