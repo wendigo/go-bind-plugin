@@ -20,5 +20,4 @@ script:
   - ineffassign .
   - go vet ./...
   - go test -v -coverprofile=main.coverprofile ./
-  - $HOME/gopath/bin/gover
   - $HOME/gopath/bin/goveralls -coverprofile=main.coverprofile -service travis-ci
