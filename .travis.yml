@@ -19,5 +19,5 @@ script:
   - golint ./... # This won't break the build, just show warnings
   - ineffassign .
   - go vet ./...
-  - go test -v -coverprofile=main.coverprofile ./
+  - go test -v -coverprofile=main.coverprofile ./cli
   - $HOME/gopath/bin/goveralls -coverprofile=main.coverprofile -service travis-ci
