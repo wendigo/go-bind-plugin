@@ -96,24 +96,24 @@ func Bind{{.Config.OutputName}}(path string) (*{{.Config.OutputName}}, error) {
     {{range .Plugin.Functions}}
     func{{ .Name }}, err := p.Lookup("{{ .Name }}")
     if err != nil {
-      return nil, err
+      return nil, fmt.Errorf("Could not import function '{{ .Name }}', symbol not found: %s", err)
     }
 
     if typed, ok := func{{ .Name }}.({{ .Signature }}); ok {
       ret._{{ .Name }} = typed
     } else {
-      return nil, fmt.Errorf("Could not export function '{{ .Name }}', incompatible types '{{ .Signature }}' and '%s'", reflect.TypeOf(func{{ .Name }}))
+      return nil, fmt.Errorf("Could not import function '{{ .Name }}', incompatible types '{{ .Signature }}' and '%s'", reflect.TypeOf(func{{ .Name }}))
     }
     {{end}}{{range .Plugin.Variables}}
     var{{ .Name }}, err := p.Lookup("{{ .Name }}")
     if err != nil {
-      return nil, err
+      return nil, fmt.Errorf("Could not import variable '{{ .Name }}', symbol not found: %s", err)
     }
 
     if typed, ok := var{{ .Name }}.(*{{.Signature}}); ok {
       ret.{{ .Name }} = {{if $useVarReference|not}}*{{end}}typed
     } else {
-      return nil, fmt.Errorf("Could not export variable '{{ .Name }}', incompatible types '{{ .Signature }}' and '%s'", reflect.TypeOf(var{{ .Name }}))
+      return nil, fmt.Errorf("Could not import variable '{{ .Name }}', incompatible types '{{ .Signature }}' and '%s'", reflect.TypeOf(var{{ .Name }}))
     }
     {{end}}
     return ret, nil
