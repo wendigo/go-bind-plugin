@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	http2 "github.com/wendigo/plugin_test/plug/http"
+	http2 "github.com/wendigo/go-bind-plugin/internal/test_fixtures/complex_plugin/http"
 )
 
 func DoWork(h *http.Header) *http.Header {
