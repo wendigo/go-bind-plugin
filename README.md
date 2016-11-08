@@ -49,9 +49,9 @@ Usage of go-bind-plugin:
 
 ## Wrapper API example (for -output-name "PluginAPI")
 
-`BindPluginAPI(path string) (*PluginAPI, error)` - loads plugin and wraps it with `type PluginAPI struct {}`:
-  - all functions exposed in the plugin are exposed as methods on struct
-  - all variables exposed in the plugin are exposed as references unless `-dereference-vars` is used
+`BindPluginAPI(path string) (*PluginAPI, error)` - loads plugin from `path` and wraps it with `type PluginAPI struct {}`:
+  - all functions exposed in the plugin are exposed as methods on struct `PluginAPI`
+  - all variables references exposed in the plugin are exposed as fields on struct `PluginAPI` (if `-dereference-vars` is used fields are not references to plugin's variables)
 
 `func (*PluginAPI) String() string` - provides nice textual representation of the wrapper
 
