@@ -23,7 +23,7 @@ Usage of go-bind-plugin:
   -output-name string
     	Output struct name (default "PluginAPI")
   -output-package string
-    	Output package (can be derived from output-path)
+    	Output package (can be derived from output-path) (default "main")
   -output-path string
     	Output file path (default "plugin_api.go")
   -plugin-package string
