@@ -91,17 +91,17 @@ Usage of go-bind-plugin:
 
 **go-bind-plugin** will do following things on invocation:
 
-- build plugin to `tmp/plugin.so` (even if plugin exists it will be rebuilded) from package `github.com/plugin_test/plug` (must exist in $GOPATH or vendor/)
-- create wrapper struct `wrapper.TestPlugin` in `tmp/plugin.go`
-- dereference variables exposed by the plugin in the generated wrapper
-- format generated code with `gofmt -s -w`
-- write sha256 checksum to `tmp/plugin.go` that will be validated when plugin is loaded via `wrapper.BindTestPlugin(path string) (*TestPlugin, error)`
+- build plugin to `tmp/plugin.so` (even if plugin exists it will be rebuilded) from `github.com/plugin_test/plug` source (must exist in $GOPATH or vendor/)
+- generate wrapper struct `wrapper.TestPlugin` in `tmp/plugin.go`
+- dereference variables in the generated wrapper
+- format generated wrapper with `gofmt -s -w`
+- write sha256 checksum to `tmp/plugin.go` that will be checked when loading plugin with `wrapper.BindTestPlugin(path string) (*TestPlugin, error)`
 
 ### Wrapper API example (for -output-name "PluginAPI")
 
-`BindPluginAPI(path string) (*PluginAPI, error)` - loads plugin from `path` and wraps it with `type PluginAPI struct {}`:
-  - all functions exposed in the plugin are exposed as methods on struct `PluginAPI`
-  - all variables references exposed in the plugin are exposed as fields on struct `PluginAPI` (if `-dereference-vars` is used fields are not references to plugin's variables)
+`BindPluginAPI(path string) (*PluginAPI, error)` - loads plugin from `path` and wraps it with `type PluginAPI struct`:
+  - all functions exported by the plugin are exposed as methods on struct `PluginAPI`
+  - all variables exported by the plugin are exposed as fields on struct `PluginAPI` (if `-dereference-vars` is used fields are not references to plugin's variables)
 
 `func (*PluginAPI) String() string` - provides nice textual representation of the wrapper
 
