@@ -1,8 +1,8 @@
 package cli
 
 import (
-	"fmt"
 	"reflect"
+	"sort"
 )
 
 type variable struct {
@@ -10,14 +10,6 @@ type variable struct {
 	Typ       string
 	PkgPath   string
 	Signature string
-}
-
-func (v *variable) String() string {
-	return fmt.Sprintf("name:%s, signature: %s", v.Name, v.Signature)
-}
-
-func (v *variable) Declaration() string {
-	return fmt.Sprintf("%s *%s", v.Name, v.Signature)
 }
 
 func (p *pluginStructure) analyzeVariables() error {
@@ -33,6 +25,10 @@ func (p *pluginStructure) analyzeVariables() error {
 			})
 		}
 	}
+
+	sort.Slice(p.Variables, func(i, j int) bool {
+		return p.Variables[i].Name < p.Variables[j].Name
+	})
 
 	return nil
 }

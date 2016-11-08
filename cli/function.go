@@ -3,6 +3,7 @@ package cli
 import (
 	"fmt"
 	"reflect"
+	"sort"
 	"strings"
 )
 
@@ -13,10 +14,6 @@ type function struct {
 	ArgumentsCount int
 	IsVariadic     bool
 	ReturnsVoid    bool
-}
-
-func (f *function) String() string {
-	return f.Name
 }
 
 func (f *function) TrimmedSignature() string {
@@ -52,6 +49,10 @@ func (p *pluginStructure) analyzeFunctions() error {
 			})
 		}
 	}
+
+	sort.Slice(p.Functions, func(i, j int) bool {
+		return p.Functions[i].Name < p.Functions[j].Name
+	})
 
 	return nil
 }
