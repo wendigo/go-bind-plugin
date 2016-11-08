@@ -5,6 +5,43 @@
 
 **go-bind-plugin** is `go:generate` tool for building [golang 1.8 plugins](https://tip.golang.org/pkg/plugin) and generating wrappers around exported symbols (functions and variables).
 
+## Purpose / how it works
+
+**go-bind-plugin** generates neat API around symbols exported by a plugin built with `go build -buildmode=plugin` in upcoming go 1.8. [plugin.Plugin](https://tip.golang.org/pkg/plugin/#Plugin) holds information about exported symbols as map[string]interface{}. go-bind-plugins uses reflection to find out actual types of symbols and generates typed API for a provided plugin with additional functionalities (like dereferencing exported variables and checking sha256 sum). Basic usage does not require plugin sources as wrapper can be generated using only `.so` file.
+
+For example if plugin exports `AddTwoInts(a, b int) int` function instead of using [Plugin.Lookup](https://tip.golang.org/pkg/plugin/#Plugin.Lookup) directly:
+
+```
+plug, err := plugin.Open("plugin.so")
+
+if err != nil {
+  panic(err)
+}
+
+symbol, err := plug.Lookup("AddTwoInts")
+if err != nil {
+  panic(err)
+}
+
+if typed, ok := symbol.(func(int, int) int); ok {
+  result := typed(10, 20)
+}
+```
+
+you can just simply do:
+
+```
+plug, err := BindPluginAPI("plugin.so") // plug is *BingPluginAPI
+
+if err != nil {
+  panic(err)
+}
+
+result := plug.AddTwoInts(10, 20)
+```
+
+`BingPluginAPI()` will ensure that plugin exports `AddTwoInts` functions and its type is `func(int, int) int`.
+
 ## Usage
 
 ```
