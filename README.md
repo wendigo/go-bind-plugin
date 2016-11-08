@@ -33,7 +33,7 @@ Usage of go-bind-plugin:
     	Write plugin's sha256 checksum to wrapper and validate it when loading it
 ```
 
-## Example
+### Example
 
 `
 //go:generate go-bind-plugin -format -plugin-package github.com/plugin_test/plug -rebuild -sha256 -dereference-vars -output-name TestPlugin -output-path tmp/plugin.go -plugin-path tmp/plugin.so -output-package wrapper
@@ -49,7 +49,7 @@ See end-to-end example in [go-bind-plugin-example](https://github.com/wendigo/go
 - format generated code with `gofmt -s -w`
 - write sha256 checksum to `tmp/plugin.go` that will be validated when plugin is loaded via `wrapper.BindTestPlugin(path string) (*TestPlugin, error)`
 
-## Wrapper API example (for -output-name "PluginAPI")
+### Wrapper API example (for -output-name "PluginAPI")
 
 `BindPluginAPI(path string) (*PluginAPI, error)` - loads plugin from `path` and wraps it with `type PluginAPI struct {}`:
   - all functions exposed in the plugin are exposed as methods on struct `PluginAPI`
@@ -57,7 +57,7 @@ See end-to-end example in [go-bind-plugin-example](https://github.com/wendigo/go
 
 `func (*PluginAPI) String() string` - provides nice textual representation of the wrapper
 
-## Example generated wrapper information
+### Example generated wrapper information
 
 ```
 Wrapper info:
