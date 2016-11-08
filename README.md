@@ -20,7 +20,7 @@ if err != nil {
 
 symbol, err := plug.Lookup("AddTwoInts")
 if err != nil {
-  panic(err)
+  panic("AddTwoInts was not found in a plugin")
 }
 
 if typed, ok := symbol.(func(int, int) int); ok {
@@ -31,7 +31,7 @@ if typed, ok := symbol.(func(int, int) int); ok {
 
 symbol, err := plug.Lookup("BuildVersion")
 if err != nil {
-  panic(err)
+  panic("BuildVersion was not found in a plugin")
 }
 
 if typed, ok := symbol.(*string); ok {
@@ -54,7 +54,7 @@ result := plug.AddTwoInts(10, 20)
 fmt.Println(plug.BuildVersion) // or fmt.Println(*plug.BuildVersion) if -dereference-vars is not used
 ```
 
-`BingPluginAPI()` will ensure that plugin exports `AddTwoInts` functions and its type is `func(int, int) int`.
+`BindPluginAPI()` will ensure that plugin exports `func AddTwoInts(int, int) int` and `var BuildVersion string`.
 
 ## Usage
 
