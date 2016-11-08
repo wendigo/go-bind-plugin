@@ -11,7 +11,7 @@
 
 For example if plugin exports `AddTwoInts(a, b int) int` function and `BuildVersion string` variable instead of using [Plugin.Lookup](https://tip.golang.org/pkg/plugin/#Plugin.Lookup) directly:
 
-```
+```go
 plug, err := plugin.Open("plugin.so")
 
 if err != nil {
@@ -43,7 +43,7 @@ if typed, ok := symbol.(*string); ok {
 
 you can just simply do:
 
-```
+```go
 plug, err := BindPluginAPI("plugin.so") // plug is *BingPluginAPI
 
 if err != nil {
