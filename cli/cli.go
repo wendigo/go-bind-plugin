@@ -196,16 +196,30 @@ func (c *Cli) buildPluginFromSources(pluginPath string, pluginPackage string) er
 }
 
 func (c *Cli) buildCommandArgs() string {
-	return fmt.Sprintf(
-		"go-bind-plugin -plugin-path %s -plugin-package %s -output-name %s -output-path %s -output-package %s -sha256 %v -format %v -rebuild %v",
+	var commandLine []string
+
+	commandLine = append(commandLine, fmt.Sprintf(
+		"go-bind-plugin -plugin-path %s -plugin-package %s -output-name %s -output-path %s -output-package %s",
 		c.config.PluginPath,
 		c.config.PluginPackage,
 		c.config.OutputName,
 		c.config.OutputPath,
 		c.config.OutputPackage,
-		c.config.CheckSha256,
-		c.config.FormatCode,
-		c.config.ForcePluginRebuild)
+	))
+
+	if c.config.CheckSha256 {
+		commandLine = append(commandLine, "-sha256")
+	}
+
+	if c.config.DereferenceVariables {
+		commandLine = append(commandLine, "-dereference-vars")
+	}
+
+	if c.config.ForcePluginRebuild {
+		commandLine = append(commandLine, "-rebuild")
+	}
+
+	return strings.Join(commandLine, " ")
 }
 
 func validateConfig(config *Config) error {
