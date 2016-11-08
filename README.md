@@ -5,13 +5,15 @@
 
 **go-bind-plugin** is `go:generate` tool for building [golang 1.8 plugins](https://tip.golang.org/pkg/plugin) and generating wrappers around exported symbols (functions and variables).
 
-## Purpose / how it works
+## What is it?
 
 **go-bind-plugin** generates neat API around symbols exported by a `*.so` plugin built with `go build -buildmode=plugin` in upcoming go 1.8. [plugin.Plugin](https://tip.golang.org/pkg/plugin/#Plugin) holds information about exported symbols as `map[string]interface{}`. 
 
 **go-bind-plugins** uses reflection to find out actual types of symbols and generates typed API wrapping plugin with additional functionalities (like dereferencing exported variables and checking SHA256 sum). 
 
 *Note: Basic usage does not require plugin sources as wrapper can be generated using only* `*.so` *file.*
+
+## Why should I use it?
 
 In example if plugin exports `func AddTwoInts(a, b int) int` and `var BuildVersion string` instead of using [Plugin.Lookup](https://tip.golang.org/pkg/plugin/#Plugin.Lookup) directly:
 
@@ -57,6 +59,8 @@ if err != nil {
 result := plug.AddTwoInts(10, 20)
 fmt.Println(plug.BuildVersion) // or fmt.Println(*plug.BuildVersion) if -dereference-vars is not used
 ```
+
+`plugin_api.BindPluginAPI()` ensures that plugin exports required symbols and their types are correct.
 
 ## Usage
 
