@@ -1,5 +1,8 @@
 # go-bind-plugin [![Build Status](https://travis-ci.org/wendigo/go-bind-plugin.svg?branch=master)](https://travis-ci.org/wendigo/go-bind-plugin)&nbsp;[![Coverage Status](https://coveralls.io/repos/github/wendigo/go-bind-plugin/badge.svg?branch=master)](https://coveralls.io/github/wendigo/go-bind-plugin?branch=master)&nbsp;[![GoDoc](https://godoc.org/github.com/wendigo/go-bind-plugin/cli?status.svg)](https://godoc.org/github.com/wendigo/go-bind-plugin/cli)&nbsp;[![Go Report Card](https://goreportcard.com/badge/github.com/wendigo/go-bind-plugin)](https://goreportcard.com/report/github.com/wendigo/go-bind-plugin)
 
+> TL;DR: See end-to-end example in [go-bind-plugin-example](https://github.com/wendigo/go-bind-plugin-example).
+
+
 **go-bind-plugin** is `go:generate` tool for building [golang 1.8 plugins](https://tip.golang.org/pkg/plugin) and generating wrappers around exported symbols (functions and variables).
 
 ## Usage
@@ -38,8 +41,6 @@ Usage of go-bind-plugin:
 `
 //go:generate go-bind-plugin -format -plugin-package github.com/plugin_test/plug -rebuild -sha256 -dereference-vars -output-name TestPlugin -output-path tmp/plugin.go -plugin-path tmp/plugin.so -output-package wrapper
 `
-
-See end-to-end example in [go-bind-plugin-example](https://github.com/wendigo/go-bind-plugin-example).
 
 **go-bind-plugin** will do following things on invocation:
 
