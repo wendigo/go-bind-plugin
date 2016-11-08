@@ -65,10 +65,6 @@ func loadPlugin(path string, imports []string) (*pluginStructure, error) {
 	return ps, nil
 }
 
-func (p *pluginStructure) String() string {
-	return fmt.Sprintf("plugin %s\n{\n\tfunctions=%s,\n\tvariables=%s\n}\n", p.Package, p.Functions, p.Variables)
-}
-
 func (p *pluginStructure) SymbolsLen() int {
 	return len(p.Symbols)
 }
