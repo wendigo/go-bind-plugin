@@ -35,9 +35,9 @@ Usage of go-bind-plugin:
 
 ## Example
 
-```
+`
 //go:generate go-bind-plugin -format -plugin-package github.com/plugin_test/plug -rebuild -sha256 -dereference-vars -output-name TestPlugin -output-path tmp/plugin.go -plugin-path tmp/plugin.so -output-package wrapper
-```
+`
 
 See end-to-end example in [go-bind-plugin-example](https://github.com/wendigo/go-bind-plugin-example).
 
