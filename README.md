@@ -45,18 +45,17 @@ Usage of go-bind-plugin:
 - create wrapper struct `wrapper.TestPlugin` in `tmp/plugin.go`
 - dereference variables exposed by the plugin in the generated wrapper
 - format generated code with `gofmt -s -w`
-- write sha256 checksum to `tmp/plugin.go` that will be validated when plugin is loaded via `wrapper.LoadTestPlugin(path string) (*TestPlugin, error)`
+- write sha256 checksum to `tmp/plugin.go` that will be validated when plugin is loaded via `wrapper.BindTestPlugin(path string) (*TestPlugin, error)`
 
-## Wrapper API
+## Wrapper API example (for -output-name "PluginAPI")
 
-`Bind[output-name](path string) (*[output-name], error)` - loads plugin and wraps it with `type [output-name] struct`:
+`BindPluginAPI(path string) (*PluginAPI, error)` - loads plugin and wraps it with `type PluginAPI struct {}`:
   - all functions exposed in the plugin are exposed as methods on struct
   - all variables exposed in the plugin are exposed as references unless `-dereference-vars` is used
 
-`func ([output-name]) String() string` - provides nice textual representation of the wrapper
+`func (*PluginAPI) String() string` - provides nice textual representation of the wrapper
 
-
-## Example generated wrapper information (provided by String())
+## Example generated wrapper information
 
 ```
 Wrapper info:
