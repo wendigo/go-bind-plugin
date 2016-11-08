@@ -12,13 +12,13 @@ before_install:
   - go get github.com/gordonklaus/ineffassign
 
 install: go get -t -v $(go list ./... | grep -v /internal/)
-  
+
 script:
   - gofiles=$(find ./ -name '*.go') && [ -z "$gofiles" ] || unformatted=$(goimports -l $gofiles) && [ -z "$unformatted" ] || (echo >&2 "Go files must be formatted with gofmt. Following files has problem:\n $unformatted" && false)
   - diff <(echo -n) <(gofmt -s -d .)
   - golint ./... # This won't break the build, just show warnings
   - ineffassign .
   - go vet ./...
-  - go test -race -coverprofile=main.coverprofile 
+  - go test -v -coverprofile=main.coverprofile
   - $HOME/gopath/bin/gover
   - $HOME/gopath/bin/goveralls -coverprofile=main.coverprofile -service travis-ci
