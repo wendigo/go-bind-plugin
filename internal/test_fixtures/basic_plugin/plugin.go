@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 func ReturningInt32() int32 {
 	return 32
 }
@@ -10,4 +12,8 @@ func ReturningStringSlice() []string {
 
 func ReturningIntArray() [3]int32 {
 	return [...]int32{1, 0, 1}
+}
+
+func NonReturningFunction() {
+	fmt.Println("I'm not returning anything")
 }

@@ -88,5 +88,11 @@ func (p *pluginStructure) getFunctionSignature(fun reflect.Type, namedParams boo
 		out = append(out, p.getVariableSignature(fun.Out(i), fun.IsVariadic() && i == fun.NumOut()-1))
 	}
 
-	return fmt.Sprintf("func(%s) (%s)", strings.Join(in, ", "), strings.Join(out, ", "))
+	var outParams string
+
+	if fun.NumOut() > 0 {
+		outParams = fmt.Sprintf(" (%s)", strings.Join(out, ", "))
+	}
+
+	return fmt.Sprintf("func(%s)%s", strings.Join(in, ", "), outParams)
 }

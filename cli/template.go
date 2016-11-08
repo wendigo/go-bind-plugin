@@ -30,7 +30,7 @@ type {{.Config.OutputName}} struct {
 //
 // See docs at https://godoc.org/{{$pluginPackage}}#{{.Name}}
 func (p *{{$receiver}}) {{.Name}}{{.TrimmedSignature}} {
-  return p._{{ .Name }}({{ .ArgumentsCall }})
+  {{ if .ReturnsVoid | not }}return {{ end }}p._{{ .Name }}({{ .ArgumentsCall }})
 }
 {{end}}
 

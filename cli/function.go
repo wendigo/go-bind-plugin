@@ -12,6 +12,7 @@ type function struct {
 	FunctionHeader string
 	ArgumentsCount int
 	IsVariadic     bool
+	ReturnsVoid    bool
 }
 
 func (f *function) String() string {
@@ -46,6 +47,7 @@ func (p *pluginStructure) analyzeFunctions() error {
 				Signature:      p.getFunctionSignature(typ, false),
 				FunctionHeader: p.getFunctionSignature(typ, true),
 				ArgumentsCount: typ.NumIn(),
+				ReturnsVoid:    typ.NumOut() == 0,
 				IsVariadic:     typ.IsVariadic(),
 			})
 		}
