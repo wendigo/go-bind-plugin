@@ -23,7 +23,7 @@ func main() {
 	flagset.BoolVar(&config.CheckSha256, "sha256", false, "Write plugin's sha256 checksum to wrapper and validate it when loading it")
 	flagset.BoolVar(&config.FormatCode, "format", true, "Format generated output file with gofmt")
 	flagset.BoolVar(&config.ForcePluginRebuild, "rebuild", false, "Rebuild plugin on every run")
-	flagset.StringVar(&config.OutputPackage, "output-package", "", "Output package (can be derived from output-path)")
+	flagset.StringVar(&config.OutputPackage, "output-package", "main", "Output package (can be derived from output-path)")
 
 	if err := flagset.Parse(os.Args[1:]); err != nil {
 		logger.Fatal(err)
