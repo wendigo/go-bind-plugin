@@ -7,7 +7,7 @@
 
 ## Purpose / how it works
 
-**go-bind-plugin** generates neat API around symbols exported by a plugin built with `go build -buildmode=plugin` in upcoming go 1.8. [plugin.Plugin](https://tip.golang.org/pkg/plugin/#Plugin) holds information about exported symbols as map[string]interface{}. go-bind-plugins uses reflection to find out actual types of symbols and generates typed API for a provided plugin with additional functionalities (like dereferencing exported variables and checking sha256 sum). Basic usage does not require plugin sources as wrapper can be generated using only `.so` file.
+**go-bind-plugin** generates neat API around symbols exported by a `*.so` plugin built with `go build -buildmode=plugin` in upcoming go 1.8. [plugin.Plugin](https://tip.golang.org/pkg/plugin/#Plugin) holds information about exported symbols as `map[string]interface{}`. **go-bind-plugins** uses reflection to find out actual types of symbols and generates typed API wrapping plugin with additional functionalities (like dereferencing exported variables and checking SHA256 sum). Basic usage does not require plugin sources as wrapper can be generated using only `*.so` file.
 
 For example if plugin exports `AddTwoInts(a, b int) int` function and `BuildVersion string` variable instead of using [Plugin.Lookup](https://tip.golang.org/pkg/plugin/#Plugin.Lookup) directly:
 
@@ -85,7 +85,6 @@ Usage of go-bind-plugin:
 ```
 
 ### Example
-
 `
 //go:generate go-bind-plugin -format -plugin-package github.com/plugin_test/plug -rebuild -sha256 -dereference-vars -output-name TestPlugin -output-path tmp/plugin.go -plugin-path tmp/plugin.so -output-package wrapper
 `
