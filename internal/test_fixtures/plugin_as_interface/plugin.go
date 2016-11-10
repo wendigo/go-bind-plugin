@@ -9,7 +9,7 @@ func ReturningInt32() int32 {
 
 // ReturningStringSlice is only exported for testing purposes
 func ReturningStringSlice() []string {
-	return make([]string, 0)
+	return []string{"hello", "world"}
 }
 
 // ReturningIntArray is only exported for testing purposes
@@ -21,3 +21,6 @@ func ReturningIntArray() [3]int32 {
 func NonReturningFunction() {
 	fmt.Println("I'm not returning anything")
 }
+
+// X should not be exported in the interface
+var X = "Should not be exported"

@@ -18,6 +18,7 @@ type testCase struct {
 	Plugin         string
 	ExpectedOutput string
 	ExecutedCode   string
+	AsInterface    bool
 }
 
 func TestWillGenerateComplexPluginWithoutErrors(t *testing.T) {
@@ -33,6 +34,12 @@ func TestWillGenerateComplexPluginWithoutErrors(t *testing.T) {
 			ExecutedCode:   "fmt.Println(pl.ReturningIntArray())",
 			ExpectedOutput: "[1 0 1]",
 		},
+		{
+			Plugin:         "plugin_as_interface",
+			ExecutedCode:   "fmt.Println(pl.ReturningStringSlice())",
+			ExpectedOutput: "hello world",
+			AsInterface:    true,
+		},
 	}
 
 	for i, testCase := range testCases {
@@ -47,6 +54,7 @@ func TestWillGenerateComplexPluginWithoutErrors(t *testing.T) {
 			ForcePluginRebuild: true,
 			OutputPackage:      "main",
 			OutputName:         "TestWrapper",
+			AsInterface:        testCase.AsInterface,
 		}
 
 		client, err := New(config, log.New(ioutil.Discard, "", 0))
@@ -54,7 +62,7 @@ func TestWillGenerateComplexPluginWithoutErrors(t *testing.T) {
 			t.Fatalf("[Test %d] Expected err to be nil, actual: %s", i, err)
 		}
 
-		if generateErr := client.GenerateFile(); err != nil {
+		if generateErr := client.GenerateFile(); generateErr != nil {
 			t.Fatalf("[Test %d] Expected err to be nil, actual: %s", i, generateErr)
 		}
 

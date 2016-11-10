@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"plugin"
+	"strings"
 	"unsafe"
 )
 
@@ -23,7 +24,10 @@ type pluginStructure struct {
 
 	Functions    []*function
 	Variables    []*variable
-	ImportsNames map[string]string
+	Imports      []string
+	NamedImports map[string]string
+
+	importsNames map[string]string
 }
 
 func loadPlugin(path string, imports []string) (*pluginStructure, error) {
@@ -47,9 +51,9 @@ func loadPlugin(path string, imports []string) (*pluginStructure, error) {
 	ps := &pluginStructure{
 		Symbols:      plug.symbols,
 		Package:      plug.path,
-		ImportsNames: make(map[string]string),
 		Size:         stat.Size(),
 		Sha256:       shaSum,
+		importsNames: make(map[string]string),
 	}
 
 	for _, pkg := range imports {
@@ -61,6 +65,9 @@ func loadPlugin(path string, imports []string) (*pluginStructure, error) {
 	if err2 != nil {
 		return nil, err2
 	}
+
+	ps.Imports = ps.imports()
+	ps.NamedImports = ps.namedImports()
 
 	return ps, nil
 }
@@ -79,4 +86,34 @@ func (p *pluginStructure) analyze() error {
 	}
 
 	return nil
+}
+
+func (p *pluginStructure) namedImports() map[string]string {
+	var ret = make(map[string]string)
+
+	for name, imp := range p.importsNames {
+		if p.isNamedImport(imp, name) {
+			ret[name] = imp
+		}
+	}
+
+	return ret
+}
+
+func (p *pluginStructure) imports() []string {
+	var ret []string
+
+	for name, imp := range p.importsNames {
+		if p.isNamedImport(imp, name) {
+			ret = append(ret, fmt.Sprintf("%s %q", name, imp))
+		} else {
+			ret = append(ret, fmt.Sprintf("%q", imp))
+		}
+	}
+
+	return ret
+}
+
+func (p *pluginStructure) isNamedImport(pkg string, importName string) bool {
+	return pkg[strings.LastIndex(pkg, "/")+1:] != importName
 }

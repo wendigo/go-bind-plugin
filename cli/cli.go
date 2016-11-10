@@ -36,6 +36,8 @@ type Config struct {
 	FormatCode           bool
 	ForcePluginRebuild   bool
 	OutputPackage        string
+	HideVariables        bool
+	AsInterface          bool
 }
 
 // Cli is responsible for generating plugin wrapper, can be initialized with New()
@@ -96,10 +98,7 @@ func (c *Cli) GenerateFile() error {
 		return fmt.Errorf("Could not create output file: %s", err)
 	}
 
-	tpl, err := template.New("generate").
-		Funcs(template.FuncMap{"isStandardImport": func(pkg string, importName string) bool {
-			return pkg[strings.LastIndex(pkg, "/")+1:] == importName
-		}}).Parse(generateFileTemplate)
+	tpl, err := template.New("generate").Parse(generateFileTemplate)
 
 	if err != nil {
 		return err
@@ -219,6 +218,14 @@ func (c *Cli) buildCommandArgs() string {
 		commandLine = append(commandLine, "-rebuild")
 	}
 
+	if c.config.AsInterface {
+		commandLine = append(commandLine, "-interface")
+	}
+
+	if c.config.HideVariables {
+		commandLine = append(commandLine, "-hide-vars")
+	}
+
 	return strings.Join(commandLine, " ")
 }
 
@@ -241,6 +248,10 @@ func validateConfig(config *Config) error {
 
 	if config.PluginPackage != "" && config.PluginPath == "" {
 		config.PluginPath = "plugin.so"
+	}
+
+	if config.AsInterface {
+		config.HideVariables = true
 	}
 
 	return nil

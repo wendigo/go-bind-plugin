@@ -57,7 +57,7 @@ func (p *pluginStructure) getNamedPkgImport(pkg string) string {
 			nextImportName = fmt.Sprintf("%s_%d", importName, nextIndex)
 		}
 
-		if current, ok := p.ImportsNames[nextImportName]; ok {
+		if current, ok := p.importsNames[nextImportName]; ok {
 			// We already have this package
 			if current == pkg {
 				return nextImportName + "."
@@ -66,7 +66,7 @@ func (p *pluginStructure) getNamedPkgImport(pkg string) string {
 			nextIndex++
 			continue
 		} else {
-			p.ImportsNames[nextImportName] = pkg
+			p.importsNames[nextImportName] = pkg
 			return nextImportName + "."
 		}
 	}
