@@ -11,8 +11,7 @@ var generateFileTemplate = `package {{.OutputPackage}}
 
 {{ $imports := .Plugin.Imports }}
 import ({{ range $imports }}
-  {{.}}
-{{end}}
+  {{.}}{{end}}
 )
 {{$useVarReference := .Config.DereferenceVariables|not}}{{$pluginPackage := .Plugin.Package}}{{$receiver := .Config.OutputName}}{{$interface := .Config.AsInterface}}
 // {{.Config.OutputName}} wraps symbols (functions and variables) exported by plugin {{.Plugin.Package}}
@@ -80,7 +79,7 @@ func (p *{{if $interface}}_{{end}}{{$receiver}}) String() string {
 }
 
 // Bind{{.Config.OutputName}} loads plugin from the given path and binds {{if .Config.AsInterface}}functions{{else}}symbols (variables and functions){{end}}
-// to the {{if .Config.AsInterface}}struct implementing {{.Config.OutputName}} interface{{else}}{{.Config.OutputName}} struct{{end}}. {{if .Config.HideVariables | not}}{{if .Config.DereferenceVariables}}All variables are derefenences. {{end}}{{end}}
+// to the {{if .Config.AsInterface}}struct implementing {{.Config.OutputName}} interface{{else}}{{.Config.OutputName}} struct{{end}}. {{if .Config.HideVariables | not}}{{if .Config.DereferenceVariables}}All variables are derefenenced. {{end}}{{end}}
 {{ if .Config.CheckSha256 }}// When plugin is loaded sha256 checksum is computed and checked against precomputed once. On mismatch error is returned.
 {{end}}func Bind{{.Config.OutputName}}(path string) ({{if.Config.AsInterface|not}}*{{end}}{{.Config.OutputName}}, error) {
     p, err := plugin.Open(path)

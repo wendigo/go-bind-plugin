@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"plugin"
+	"sort"
 	"strings"
 	"unsafe"
 )
@@ -110,6 +111,10 @@ func (p *pluginStructure) imports() []string {
 			ret = append(ret, fmt.Sprintf("%q", imp))
 		}
 	}
+
+	sort.Slice(ret, func(i, j int) bool {
+		return ret[i] < ret[j]
+	})
 
 	return ret
 }
