@@ -76,7 +76,7 @@ Usage of go-bind-plugin:
   -hide-vars
     	Do not export plugin variables
   -interface
-    	Return interface instead of struct (turns on -hide-vars)
+    	Generate and return interface instead of struct (turns on -hide-vars)
   -output-name string
     	Output struct name (default "PluginAPI")
   -output-package string
