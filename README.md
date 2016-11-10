@@ -144,7 +144,7 @@ Exported functions (3):
 
 ## Plugin call overhead
 
-Using `-buildmode=plugin` with generated plugin seems not to add overhead when calling methods on a wrapper.
+Using `-buildmode=plugin` with generated wrapper seems not to add overhead when calling methods on a wrapper (creating plugin instance and loading `*.so` file is constant cost).
 
 ```go
 BenchmarkCallOverhead/plugin-8         	30000000	        58.0 ns/op	       0 B/op	       0 allocs/op
