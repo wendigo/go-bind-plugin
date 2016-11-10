@@ -114,6 +114,12 @@ Usage of go-bind-plugin:
 
 `func (*PluginAPI) String() string` - provides nice textual representation of the wrapper
 
+### Wrapper as interface
+
+When `-interface` is used instead of generating and returning `struct` interface containing all exported symbols is generated. This eases mocking and working with multiple plugins exporting the same API. 
+
+**Note** that `-interface` effectively enables `-hide-vars` so variables won't be exported from the plugin.
+
 ### Example generated wrapper information
 
 ```
