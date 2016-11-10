@@ -50,7 +50,7 @@ if typed, ok := symbol.(*string); ok {
 you can just simply do:
 
 ```go
-plug, err := plugin_api.BindPluginAPI("plugin.so") // plug is *plugin_api.PluginAPI
+plug, err := pluginapi.BindPluginAPI("plugin.so") // plug is *plugin_api.PluginAPI
 
 if err != nil {
   panic(err)
@@ -60,7 +60,7 @@ result := plug.AddTwoInts(10, 20)
 fmt.Println(plug.BuildVersion) // or fmt.Println(*plug.BuildVersion) if -dereference-vars is not used
 ```
 
-`plugin_api.BindPluginAPI()` ensures that plugin exports required symbols and their types are correct.
+`pluginapi.BindPluginAPI()` ensures that plugin exports required symbols and their types are correct.
 
 ## Usage
 
@@ -92,7 +92,7 @@ Usage of go-bind-plugin:
 
 ### Example
 `
-//go:generate go-bind-plugin -format -plugin-package github.com/plugin_test/plug -rebuild -sha256 -dereference-vars -output-name TestPlugin -output-path tmp/plugin.go -plugin-path tmp/plugin.so -output-package wrapper
+//go:generate go-bind-plugin -format -plugin-package github.com/plugin_test/plug -rebuild -sha256 -dereference-vars -output-name TestPlugin -output-path tmp/plugin.go -plugin-path tmp/plugin.so -output-package pluginapi
 `
 
 **go-bind-plugin** will do following things on invocation:
@@ -101,7 +101,7 @@ Usage of go-bind-plugin:
 - generate wrapper struct `wrapper.TestPlugin` in `tmp/plugin.go`
 - dereference variables in the generated wrapper
 - format generated wrapper with `gofmt -s -w`
-- write sha256 checksum to `tmp/plugin.go` that will be checked when loading plugin with `wrapper.BindTestPlugin(path string) (*TestPlugin, error)`
+- write sha256 checksum to `tmp/plugin.go` that will be checked when loading plugin with `pluginapi.BindTestPlugin(path string) (*TestPlugin, error)`
 
 ### Wrapper API example (for -output-name "PluginAPI")
 
