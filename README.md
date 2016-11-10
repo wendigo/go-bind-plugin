@@ -50,7 +50,7 @@ if typed, ok := symbol.(*string); ok {
 you can just simply do:
 
 ```go
-plug, err := plugin_api.BindPluginAPI("plugin.so") // plug is *plugin_api.BindPluginAPI
+plug, err := plugin_api.BindPluginAPI("plugin.so") // plug is *plugin_api.PluginAPI
 
 if err != nil {
   panic(err)
