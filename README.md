@@ -7,9 +7,9 @@
 
 ## What is it?
 
-**go-bind-plugin** generates neat API around symbols exported by a `*.so` plugin built with `go build -buildmode=plugin` in upcoming go 1.8. [plugin.Plugin](https://tip.golang.org/pkg/plugin/#Plugin) holds information about exported symbols as `map[string]interface{}`. 
+**go-bind-plugin** generates neat API around symbols exported by a `*.so` plugin built with `go build -buildmode=plugin` in upcoming go 1.8. [plugin.Plugin](https://tip.golang.org/pkg/plugin/#Plugin) holds information about exported symbols as `map[string]interface{}`.
 
-**go-bind-plugins** uses reflection to find out actual types of symbols and generates typed API wrapping plugin with additional functionalities (like dereferencing exported variables and checking SHA256 sum). 
+**go-bind-plugins** uses reflection to find out actual types of symbols and generates typed API wrapping plugin with additional functionalities (like dereferencing exported variables and checking SHA256 sum).
 
 *Note: Basic usage does not require plugin sources as wrapper can be generated using only* `*.so` *file.*
 
@@ -68,12 +68,15 @@ fmt.Println(plug.BuildVersion) // or fmt.Println(*plug.BuildVersion) if -derefer
 go get -u github.com/wendigo/go-bind-plugin
 go-bind-plugin -help
 
-
 Usage of go-bind-plugin:
   -dereference-vars
     	Dereference plugin variables
   -format
     	Format generated output file with gofmt (default true)
+  -hide-vars
+    	Do not export plugin variables
+  -interface
+    	Return interface instead of struct (turns on -hide-vars)
   -output-name string
     	Output struct name (default "PluginAPI")
   -output-package string
@@ -127,8 +130,4 @@ Exported functions (3):
 	- ReturningInt32 func() (int32)
 	- ReturningStringSlice func() ([]string)
 	- ReturningIntArray func() ([3]int32)
-
-Exported variables (0):
-
-Plugin imports:
 ```

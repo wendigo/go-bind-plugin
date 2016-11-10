@@ -25,19 +25,38 @@ var wrapperImportsChecksum = []string{
 	"io",
 }
 
-// Config describes generator properties
+// Config for Cli
 type Config struct {
-	PluginPath           string
-	PluginPackage        string
-	OutputPath           string
-	OutputName           string
+	// Path to the plugin
+	PluginPath string
+	// Plugin's package (will be used to compile plugin when PluginPath does not exist)
+	PluginPackage string
+	// Path where generated wrapper will be written
+	OutputPath string
+
+	// Name of the struct/interface that will be generated
+	OutputName string
+
+	// Dereference variables exported by plugin
 	DereferenceVariables bool
-	CheckSha256          bool
-	FormatCode           bool
-	ForcePluginRebuild   bool
-	OutputPackage        string
-	HideVariables        bool
-	AsInterface          bool
+
+	// Generate SHA256 for existing/compiled plugin and write it to the Bind* function
+	CheckSha256 bool
+
+	// Format generated code using gofmt -s -w
+	FormatCode bool
+
+	// Rebuild plugin from sources even if *.so exists at PluginPath
+	ForcePluginRebuild bool
+
+	// Package name of the generated file
+	OutputPackage string
+
+	// Do not export plugin's variables
+	HideVariables bool
+
+	// Generate interface and return it in Bind* function instead of struct (enables HideVariables)
+	AsInterface bool
 }
 
 // Cli is responsible for generating plugin wrapper, can be initialized with New()

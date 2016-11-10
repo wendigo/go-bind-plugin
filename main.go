@@ -25,7 +25,7 @@ func main() {
 	flagset.BoolVar(&config.ForcePluginRebuild, "rebuild", false, "Rebuild plugin on every run")
 	flagset.StringVar(&config.OutputPackage, "output-package", "main", "Output package (can be derived from output-path)")
 	flagset.BoolVar(&config.HideVariables, "hide-vars", false, "Do not export plugin variables")
-	flagset.BoolVar(&config.AsInterface, "interface", false, "Return interface instead of struct (turns on -hide-vars)")
+	flagset.BoolVar(&config.AsInterface, "interface", false, "Generate and return interface instead of struct (turns on -hide-vars)")
 
 	if err := flagset.Parse(os.Args[1:]); err != nil {
 		logger.Fatal(err)
