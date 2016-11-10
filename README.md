@@ -120,6 +120,10 @@ When `-interface` is used instead of generating and returning `struct` interface
 
 **Note** that `-interface` effectively enables `-hide-vars` so variables won't be exported from the plugin.
 
+### Generated code quality
+
+Generated code passes both `go vet` and `golint` and can be formatted using `gofmt -s -w`. Exported symbols names are not changed in any way so names not following [go naming convention](https://golang.org/doc/effective_go.html) will still be reported by `golint` as invalid.
+
 ### Example generated wrapper information
 
 ```
