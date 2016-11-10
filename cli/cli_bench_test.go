@@ -5,7 +5,7 @@ import "testing"
 //go:generate go-bind-plugin -plugin-package ../internal/test_fixtures/benchmark_plugin -output-package cli -output-path cli_test_plugin.go -output-name BenchmarkPlugin
 func BenchmarkCallOverhead(b *testing.B) {
 	pl, err := BindBenchmarkPlugin("plugin.so")
-	numbers := 10000
+	numbers := 100
 	sl := prepareLargeSlice(numbers)
 	expectedSum := uint64(numbers * (numbers + 1) / 2)
 
@@ -13,7 +13,11 @@ func BenchmarkCallOverhead(b *testing.B) {
 		b.Fatalf("Could not setup benchmark: %s", err)
 	}
 
+	b.Log("Running benchmarks...")
+
 	b.Run("plugin", func(b *testing.B) {
+
+		b.ReportAllocs()
 
 		for i := 0; i < b.N; i++ {
 			sum := pl.Sum(sl)
@@ -26,6 +30,9 @@ func BenchmarkCallOverhead(b *testing.B) {
 	})
 
 	b.Run("native", func(b *testing.B) {
+
+		b.ReportAllocs()
+
 		for i := 0; i < b.N; i++ {
 			sum := nativeSum(sl)
 

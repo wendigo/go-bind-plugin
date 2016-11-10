@@ -141,3 +141,16 @@ Exported functions (3):
 	- ReturningStringSlice func() ([]string)
 	- ReturningIntArray func() ([3]int32)
 ```
+
+## Plugin call overhead
+
+Using `-buildmode=plugin` with generated plugin seems not to add overhead when calling methods on a wrapper.
+
+```go
+BenchmarkCallOverhead/plugin-8         	30000000	        58.0 ns/op	       0 B/op	       0 allocs/op
+BenchmarkCallOverhead/plugin-8         	30000000	        59.3 ns/op	       0 B/op	       0 allocs/op
+BenchmarkCallOverhead/plugin-8         	30000000	        54.8 ns/op	       0 B/op	       0 allocs/op
+BenchmarkCallOverhead/native-8         	20000000	        59.3 ns/op	       0 B/op	       0 allocs/op
+BenchmarkCallOverhead/native-8         	20000000	        59.8 ns/op	       0 B/op	       0 allocs/op
+BenchmarkCallOverhead/native-8         	20000000	        59.7 ns/op	       0 B/op	       0 allocs/op
+```
