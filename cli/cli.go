@@ -93,18 +93,18 @@ func (c *Cli) GenerateFile() error {
 
 	if !c.pluginExists(c.config.PluginPath) || c.config.ForcePluginRebuild {
 		if err := c.buildPluginFromSources(c.config.PluginPath, c.config.PluginPackage); err != nil {
-			return fmt.Errorf("Could not build plugin from sources: %s", err)
+			return fmt.Errorf("could not build plugin from sources: %s", err)
 		}
 	}
 
 	c.logger.Printf("Loading and analyzing plugin from: %s", c.config.PluginPath)
 	structure, err := loadPlugin(c.config.PluginPath, imports)
 	if err != nil {
-		return fmt.Errorf("Could not load plugin from %s: %s", c.config.PluginPath, err)
+		return fmt.Errorf("could not load plugin from %s: %s", c.config.PluginPath, err)
 	}
 
 	if structure.SymbolsLen() == 0 {
-		return fmt.Errorf("Plugin %s does not export any symbols", c.config.PluginPath)
+		return fmt.Errorf("plugin %s does not export any symbols", c.config.PluginPath)
 	}
 
 	outputPackage := c.config.OutputPackage
@@ -114,7 +114,7 @@ func (c *Cli) GenerateFile() error {
 
 	outputFile, err := c.createOutputFile(c.config.OutputPath)
 	if err != nil {
-		return fmt.Errorf("Could not create output file: %s", err)
+		return fmt.Errorf("could not create output file: %s", err)
 	}
 
 	tpl, err := template.New("generate").Parse(generateFileTemplate)
@@ -144,7 +144,7 @@ func (c *Cli) GenerateFile() error {
 	if c.config.FormatCode {
 		c.logger.Printf("Formatting generated file with gofmt -s -w %s", c.config.OutputPath)
 		if err := c.formatOutputCode(c.config.OutputPath); err != nil {
-			return fmt.Errorf("Could not format output code: %s", err)
+			return fmt.Errorf("could not format output code: %s", err)
 		}
 	}
 
@@ -172,7 +172,7 @@ func (c *Cli) createOutputDir(path string) error {
 	if info, err := os.Stat(path); err != nil && !os.IsNotExist(err) {
 		return err
 	} else if err == nil && !info.IsDir() {
-		return fmt.Errorf("Output path %s exists and is not a directory", path)
+		return fmt.Errorf("output path %s exists and is not a directory", path)
 	}
 
 	if err := os.MkdirAll(path, 0700); err != nil {
@@ -210,7 +210,11 @@ func (c *Cli) buildPluginFromSources(pluginPath string, pluginPackage string) er
 		return err
 	}
 
-	return exec.Command("go", "build", "-x", "-v", "-buildmode=plugin", "-o", pluginPath, pluginPackage).Run()
+	command := []string{"build", "-x", "-v", "-buildmode=plugin", "-o", pluginPath, pluginPackage}
+
+	c.logger.Printf("Running: go %s", strings.Join(command, " "))
+
+	return exec.Command("go", command...).Run()
 }
 
 func (c *Cli) buildCommandArgs() string {
@@ -250,7 +254,7 @@ func (c *Cli) buildCommandArgs() string {
 
 func validateConfig(config *Config) error {
 	if config.PluginPath == "" && config.PluginPackage == "" {
-		return fmt.Errorf("Either PluginPath or PluginPackage must be provided")
+		return fmt.Errorf("either PluginPath or PluginPackage must be provided")
 	}
 
 	if config.ForcePluginRebuild && config.PluginPackage == "" {

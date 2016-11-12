@@ -78,6 +78,12 @@ func (p *{{if $interface}}_{{end}}{{$receiver}}) String() string {
   return strings.Join(lines, "\n")
 }
 
+{{if $interface}}
+var (
+  _ {{.Config.OutputName }} = (*_{{.Config.OutputName}})(nil)
+)
+{{end}}
+
 // Bind{{.Config.OutputName}} loads plugin from the given path and binds {{if .Config.AsInterface}}functions{{else}}symbols (variables and functions){{end}}
 // to the {{if .Config.AsInterface}}struct implementing {{.Config.OutputName}} interface{{else}}{{.Config.OutputName}} struct{{end}}. {{if .Config.HideVariables | not}}{{if .Config.DereferenceVariables}}All variables are derefenenced. {{end}}{{end}}
 {{ if .Config.CheckSha256 }}// When plugin is loaded sha256 checksum is computed and checked against precomputed once. On mismatch error is returned.
@@ -85,7 +91,7 @@ func (p *{{if $interface}}_{{end}}{{$receiver}}) String() string {
     p, err := plugin.Open(path)
 
     if err != nil {
-      return nil, fmt.Errorf("Could not open plugin: %s", err)
+      return nil, fmt.Errorf("could not open plugin: %s", err)
     }
     {{ if .Config.CheckSha256 }}
     fileChecksum := func(path string) (string, error) {
@@ -107,37 +113,37 @@ func (p *{{if $interface}}_{{end}}{{$receiver}}) String() string {
 
     checksum, err := fileChecksum(path)
     if err != nil {
-      return nil, fmt.Errorf("Could not calculate file %s checksum", path)
+      return nil, fmt.Errorf("could not calculate file %s checksum", path)
     }
 
     if checksum != "{{.Plugin.Sha256}}" {
-      return nil, fmt.Errorf("Sha256 checksum mismatch (expected: {{.Plugin.Sha256}}, actual: %s)", checksum)
+      return nil, fmt.Errorf("SHA256 checksum mismatch (expected: {{.Plugin.Sha256}}, actual: %s)", checksum)
     }{{ end }}
 
     ret := new({{if .Config.AsInterface}}_{{end}}{{.Config.OutputName}})
     {{range .Plugin.Functions}}
     func{{ .Name }}, err := p.Lookup("{{ .Name }}")
     if err != nil {
-      return nil, fmt.Errorf("Could not import function '{{ .Name }}', symbol not found: %s", err)
+      return nil, fmt.Errorf("could not import function '{{ .Name }}', symbol not found: %s", err)
     }
 
     if typed, ok := func{{ .Name }}.({{ .Signature }}); ok {
       ret._{{ .Name }} = typed
     } else {
-      return nil, fmt.Errorf("Could not import function '{{ .Name }}', incompatible types '{{ .Signature }}' and '%s'", reflect.TypeOf(func{{ .Name }}))
+      return nil, fmt.Errorf("could not import function '{{ .Name }}', incompatible types '{{ .Signature }}' and '%s'", reflect.TypeOf(func{{ .Name }}))
     }
     {{end}}
     {{if .Config.HideVariables|not}}
     {{range .Plugin.Variables}}
     var{{ .Name }}, err := p.Lookup("{{ .Name }}")
     if err != nil {
-      return nil, fmt.Errorf("Could not import variable '{{ .Name }}', symbol not found: %s", err)
+      return nil, fmt.Errorf("could not import variable '{{ .Name }}', symbol not found: %s", err)
     }
 
     if typed, ok := var{{ .Name }}.(*{{.Signature}}); ok {
       ret.{{ .Name }} = {{if $useVarReference|not}}*{{end}}typed
     } else {
-      return nil, fmt.Errorf("Could not import variable '{{ .Name }}', incompatible types '{{ .Signature }}' and '%s'", reflect.TypeOf(var{{ .Name }}))
+      return nil, fmt.Errorf("could not import variable '{{ .Name }}', incompatible types '{{ .Signature }}' and '%s'", reflect.TypeOf(var{{ .Name }}))
     }
     {{end}}
     {{end}}

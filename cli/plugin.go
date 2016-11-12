@@ -34,17 +34,17 @@ type pluginStructure struct {
 func loadPlugin(path string, imports []string) (*pluginStructure, error) {
 	p, err := plugin.Open(path)
 	if err != nil {
-		return nil, fmt.Errorf("Could not open plugin: %s", err)
+		return nil, fmt.Errorf("could not open plugin: %s", err)
 	}
 
 	stat, err := os.Stat(path)
 	if err != nil {
-		return nil, fmt.Errorf("Could not check file size: %s", err)
+		return nil, fmt.Errorf("could not stat file: %s", err)
 	}
 
 	shaSum, err := fileChecksum(path)
 	if err != nil {
-		return nil, fmt.Errorf("Could not calculate plugin checksum: %s", err)
+		return nil, fmt.Errorf("could not calculate plugin checksum: %s", err)
 	}
 
 	plug := (*_Plugin)(unsafe.Pointer(p))
