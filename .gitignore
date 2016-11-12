@@ -1,4 +1,4 @@
 build/
 tmp/
-internal/test_fixtures/generated/
+cli/internal/test_fixtures/generated/
 cli/plugin.so

@@ -16,7 +16,7 @@ install: go get -t -v $(go list ./... | grep -v /internal/)
 script:
   - go version
   - go env
-  - gofiles=$(find ./ -name '*.go') && [ -z "$gofiles" ] || unformatted=$(goimports -l $gofiles) && [ -z "$unformatted" ] || (echo >&2 "Go files must be formatted with gofmt. Following files has problem:\n $unformatted" && false)
+  - gofiles=$(find ./ -name '*.go' | grep -v generated) && [ -z "$gofiles" ] || unformatted=$(goimports -l $gofiles) && [ -z "$unformatted" ] || (echo >&2 "Go files must be formatted with gofmt. Following files has problem:\n $unformatted" && false)
   - diff <(echo -n) <(gofmt -s -d .)
   - golint ./... # This won't break the build, just show warnings
   - ineffassign .
