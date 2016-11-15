@@ -1,4 +1,4 @@
-package cli
+package cli_test
 
 import (
 	"bufio"
@@ -11,6 +11,7 @@ import (
 	"testing"
 
 	"github.com/alecthomas/template"
+	"github.com/wendigo/go-bind-plugin/cli"
 )
 
 type testCase struct {
@@ -44,10 +45,10 @@ func TestWillGenerateComplexPluginWithoutErrors(t *testing.T) {
 	for i, testCase := range testCases {
 		t.Logf("[Test %d] Generating %s plugin...", i, testCase.Plugin)
 
-		config := Config{
+		config := cli.Config{
 			PluginPackage:      fmt.Sprintf("./internal/test_fixtures/%s", testCase.Plugin),
 			OutputPath:         fmt.Sprintf("./internal/test_fixtures/generated/%s/plugin.go", testCase.Plugin),
-			PluginPath:         fmt.Sprintf("./internal/test_fixtures/generated/%s/plugin.so", testCase.Plugin),
+			PluginPath:         "plugin.so",
 			FormatCode:         true,
 			CheckSha256:        true,
 			ForcePluginRebuild: true,
@@ -58,7 +59,7 @@ func TestWillGenerateComplexPluginWithoutErrors(t *testing.T) {
 
 		t.Logf("[Test %d] Generator config: %+v", i, config)
 
-		client, err := New(config, log.New(os.Stdout, "", 0))
+		client, err := cli.New(config, log.New(os.Stdout, "", 0))
 		if err != nil {
 			t.Fatalf("[Test %d] Expected err to be nil, actual: %s", i, err)
 		}
@@ -82,7 +83,7 @@ func TestWillGenerateComplexPluginWithoutErrors(t *testing.T) {
 	}
 }
 
-func runPlugin(code string, path string, config Config) (string, error) {
+func runPlugin(code string, path string, config cli.Config) (string, error) {
 	file, err := os.OpenFile(config.OutputPath, os.O_APPEND|os.O_WRONLY, 0700)
 
 	if err != nil {
@@ -95,7 +96,7 @@ func runPlugin(code string, path string, config Config) (string, error) {
 	}
 
 	if err := tmp.Execute(file, struct {
-		Config Config
+		Config cli.Config
 		Code   string
 	}{
 		Config: config,
