@@ -48,7 +48,7 @@ func TestWillGenerateComplexPluginWithoutErrors(t *testing.T) {
 		config := cli.Config{
 			PluginPackage:      fmt.Sprintf("./internal/test_fixtures/%s", testCase.Plugin),
 			OutputPath:         fmt.Sprintf("./internal/test_fixtures/generated/%s/plugin.go", testCase.Plugin),
-			PluginPath:         "plugin.so",
+			PluginPath:         fmt.Sprintf("./internal/test_fixtures/generated/%s/plugin.so", testCase.Plugin),
 			FormatCode:         true,
 			CheckSha256:        true,
 			ForcePluginRebuild: true,
