@@ -59,13 +59,8 @@ func TestWillGenerateComplexPluginWithoutErrors(t *testing.T) {
 
 		t.Logf("[Test %d] Generator config: %+v", i, config)
 
-		client, err := cli.New(config, log.New(os.Stdout, "", 0))
-		if err != nil {
-			t.Fatalf("[Test %d] Expected err to be nil, actual: %s", i, err)
-		}
-
-		if generateErr := client.GenerateFile(); generateErr != nil {
-			t.Fatalf("[Test %d] Expected err to be nil, actual: %s", i, generateErr)
+		if err := generatePluginWithCli(config, t); err != nil {
+			t.Fatalf("[Test %d] Expected error to be nil, actual: %s", i, err)
 		}
 
 		runFile := fmt.Sprintf("./internal/test_fixtures/generated/%s/plugin.go", testCase.Plugin)
@@ -81,6 +76,35 @@ func TestWillGenerateComplexPluginWithoutErrors(t *testing.T) {
 			t.Fatalf("[Test %d] Expected output to contain %s, actual output:\n=======\n%s\n=======\n", i, testCase.ExpectedOutput, output)
 		}
 	}
+}
+
+// Switch to generatePluginWithCli when https://github.com/golang/go/issues/17928 is solved
+func generatePluginWithCli(config cli.Config, t *testing.T) error {
+	client, err := cli.New(config, log.New(os.Stdout, "", 0))
+
+	if err != nil {
+		return err
+	}
+
+	if generateErr := client.GenerateFile(); generateErr != nil {
+		return generateErr
+	}
+
+	return nil
+}
+
+func generatePluginViaCommandLine(config cli.Config, t *testing.T) error {
+
+	args := []string{"run", "../main.go"}
+	args = append(args, strings.Split(config.String(), " ")...)
+	cmd := exec.Command("go", args...)
+
+	t.Logf("Generating plugin with config: %+v", cmd)
+
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+
+	return cmd.Run()
 }
 
 func runPlugin(code string, path string, config cli.Config) (string, error) {

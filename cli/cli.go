@@ -59,6 +59,42 @@ type Config struct {
 	AsInterface bool
 }
 
+// String formats config as command line arguments
+func (c Config) String() string {
+	var commandLine []string
+
+	commandLine = append(commandLine, fmt.Sprintf(
+		"-plugin-path %s -plugin-package %s -output-name %s -output-path %s -output-package %s",
+		c.PluginPath,
+		c.PluginPackage,
+		c.OutputName,
+		c.OutputPath,
+		c.OutputPackage,
+	))
+
+	if c.CheckSha256 {
+		commandLine = append(commandLine, "-sha256")
+	}
+
+	if c.DereferenceVariables {
+		commandLine = append(commandLine, "-dereference-vars")
+	}
+
+	if c.ForcePluginRebuild {
+		commandLine = append(commandLine, "-rebuild")
+	}
+
+	if c.AsInterface {
+		commandLine = append(commandLine, "-interface")
+	}
+
+	if c.HideVariables {
+		commandLine = append(commandLine, "-hide-vars")
+	}
+
+	return strings.Join(commandLine, " ")
+}
+
 // Cli is responsible for generating plugin wrapper, can be initialized with New()
 type Cli struct {
 	config Config
@@ -210,46 +246,21 @@ func (c *Cli) buildPluginFromSources(pluginPath string, pluginPackage string) er
 		return err
 	}
 
-	command := []string{"build", "-x", "-v", "-buildmode=plugin", "-o", pluginPath, pluginPackage}
+	command := []string{"build", "-o", pluginPath, "-buildmode=plugin", pluginPackage}
 
 	c.logger.Printf("Running: go %s", strings.Join(command, " "))
 
-	return exec.Command("go", command...).Run()
+	cmd := exec.Command("go", command...)
+
+	cmd.Stderr = os.Stderr
+	cmd.Stdout = os.Stdout
+	cmd.Env = os.Environ()
+
+	return cmd.Run()
 }
 
 func (c *Cli) buildCommandArgs() string {
-	var commandLine []string
-
-	commandLine = append(commandLine, fmt.Sprintf(
-		"go-bind-plugin -plugin-path %s -plugin-package %s -output-name %s -output-path %s -output-package %s",
-		c.config.PluginPath,
-		c.config.PluginPackage,
-		c.config.OutputName,
-		c.config.OutputPath,
-		c.config.OutputPackage,
-	))
-
-	if c.config.CheckSha256 {
-		commandLine = append(commandLine, "-sha256")
-	}
-
-	if c.config.DereferenceVariables {
-		commandLine = append(commandLine, "-dereference-vars")
-	}
-
-	if c.config.ForcePluginRebuild {
-		commandLine = append(commandLine, "-rebuild")
-	}
-
-	if c.config.AsInterface {
-		commandLine = append(commandLine, "-interface")
-	}
-
-	if c.config.HideVariables {
-		commandLine = append(commandLine, "-hide-vars")
-	}
-
-	return strings.Join(commandLine, " ")
+	return fmt.Sprintf("go-bind-plugin %s", c.config.String())
 }
 
 func validateConfig(config *Config) error {
