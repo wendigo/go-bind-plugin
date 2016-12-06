@@ -58,6 +58,11 @@ func DoWorkMap(m map[string]*http2.Work) *http2.Work {
 	return nil
 }
 
+// DoWorkVariadic accepts variadic string arguments
+func DoWorkVariadic(m ...string) bool {
+	return false
+}
+
 // X is only exported for testing purposes
 var X = http2.Work{Work: "Hello world!"}
 

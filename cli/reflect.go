@@ -85,7 +85,7 @@ func (p *pluginStructure) getFunctionSignature(fun reflect.Type, namedParams boo
 	}
 
 	for i := 0; i < fun.NumOut(); i++ {
-		out = append(out, p.getVariableSignature(fun.Out(i), fun.IsVariadic() && i == fun.NumOut()-1))
+		out = append(out, p.getVariableSignature(fun.Out(i), false))
 	}
 
 	var outParams string
