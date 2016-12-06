@@ -2,9 +2,6 @@
 
 > TL;DR: See end-to-end example in [go-bind-plugin-example](https://github.com/wendigo/go-bind-plugin-example).
 
-**Note**: as for now build fails due to https://github.com/golang/go/issues/17928 (passes with https://go-review.googlesource.com/#/c/33925/)
-
-
 **go-bind-plugin** is `go:generate` tool for building [golang 1.8 plugins](https://tip.golang.org/pkg/plugin) and generating wrappers around exported symbols (functions and variables).
 
 ## What is it?
