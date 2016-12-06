@@ -46,15 +46,16 @@ func TestWillGenerateComplexPluginWithoutErrors(t *testing.T) {
 		t.Logf("[Test %d] Generating %s plugin...", i, testCase.Plugin)
 
 		config := cli.Config{
-			PluginPackage:      fmt.Sprintf("./internal/test_fixtures/%s", testCase.Plugin),
-			OutputPath:         fmt.Sprintf("./internal/test_fixtures/generated/%s/plugin.go", testCase.Plugin),
-			PluginPath:         fmt.Sprintf("./internal/test_fixtures/generated/%s/plugin.so", testCase.Plugin),
-			FormatCode:         true,
-			CheckSha256:        true,
-			ForcePluginRebuild: true,
-			OutputPackage:      "main",
-			OutputName:         "TestWrapper",
-			AsInterface:        testCase.AsInterface,
+			PluginPackage:        fmt.Sprintf("./internal/test_fixtures/%s", testCase.Plugin),
+			OutputPath:           fmt.Sprintf("./internal/test_fixtures/generated/%s/plugin.go", testCase.Plugin),
+			PluginPath:           fmt.Sprintf("./internal/test_fixtures/generated/%s/plugin.so", testCase.Plugin),
+			FormatCode:           true,
+			CheckSha256:          true,
+			ForcePluginRebuild:   true,
+			OutputPackage:        "main",
+			OutputName:           "TestWrapper",
+			AsInterface:          testCase.AsInterface,
+			DereferenceVariables: true,
 		}
 
 		t.Logf("[Test %d] Generator config: %+v", i, config)
