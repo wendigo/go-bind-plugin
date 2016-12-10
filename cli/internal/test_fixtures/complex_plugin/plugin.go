@@ -4,6 +4,7 @@ import "C"
 
 import (
 	"fmt"
+	"net/http"
 
 	http2 "github.com/wendigo/go-bind-plugin/cli/internal/test_fixtures/complex_plugin/http"
 )
@@ -58,9 +59,14 @@ func DoWorkMap(m map[string]*http2.Work) *http2.Work {
 	return nil
 }
 
-// DoWorkVariadic accepts variadic string arguments
+// DoWorkVariadic is only exported for testing purposes
 func DoWorkVariadic(m ...string) bool {
 	return false
+}
+
+// DoWorkOnTwoNamedTypes is only exported for testing purposes
+func DoWorkOnTwoNamedTypes(l http.Header, r http2.Work) http.Dir {
+	return ""
 }
 
 // X is only exported for testing purposes
