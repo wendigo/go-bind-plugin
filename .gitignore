@@ -2,3 +2,4 @@ build/
 tmp/
 cli/internal/test_fixtures/generated/
 cli/plugin.so
+*.coverprofile
