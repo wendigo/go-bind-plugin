@@ -54,7 +54,7 @@ func loadPlugin(path string, imports []string) (*pluginStructure, error) {
 		Package:      plug.path,
 		Size:         stat.Size(),
 		Sha256:       shaSum,
-		importsNames: make(map[string]string),
+		importsNames: map[string]string{},
 	}
 
 	for _, pkg := range imports {

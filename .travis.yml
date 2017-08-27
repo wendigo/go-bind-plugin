@@ -4,7 +4,7 @@ os:
   - linux
 
 go:
-  - 1.8
+  - 1.9
 
 before_install:
   - go get github.com/mattn/goveralls
@@ -26,3 +26,11 @@ script:
   - go vet ./...
   - go test -v -coverprofile=main.coverprofile ./cli
   - $HOME/gopath/bin/goveralls -coverprofile=main.coverprofile -service travis-ci
+
+deploy:
+  skip_cleanup: true
+  provider: script
+  script: test -n "$TRAVIS_TAG" && curl -sL https://git.io/goreleaser | bash
+  on:
+    tags: true
+    all_branches: true

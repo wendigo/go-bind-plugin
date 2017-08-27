@@ -40,9 +40,12 @@ func (p *pluginStructure) getVariableSignature(variable reflect.Type, isVariadic
 }
 
 func (p *pluginStructure) getNamedPkgImport(pkg string) string {
-
 	if pkg == "" {
 		return ""
+	}
+
+	if pkg == "main" {
+		pkg = p.Package
 	}
 
 	importName := pkg[strings.LastIndex(pkg, "/")+1:]
