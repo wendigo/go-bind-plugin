@@ -60,18 +60,24 @@ type Config struct {
 	AsInterface bool
 }
 
-// String formats config as command line arguments
+// String formats config as command line arguments, omitting unset options
 func (c Config) String() string {
 	var commandLine []string
 
-	commandLine = append(commandLine, fmt.Sprintf(
-		"-plugin-path %s -plugin-package %s -output-name %s -output-path %s -output-package %s",
-		c.PluginPath,
-		c.PluginPackage,
-		c.OutputName,
-		c.OutputPath,
-		c.OutputPackage,
-	))
+	for _, flag := range []struct {
+		name  string
+		value string
+	}{
+		{"plugin-path", c.PluginPath},
+		{"plugin-package", c.PluginPackage},
+		{"output-name", c.OutputName},
+		{"output-path", c.OutputPath},
+		{"output-package", c.OutputPackage},
+	} {
+		if flag.value != "" {
+			commandLine = append(commandLine, fmt.Sprintf("-%s %s", flag.name, flag.value))
+		}
+	}
 
 	if c.CheckSha256 {
 		commandLine = append(commandLine, "-sha256")
