@@ -11,9 +11,12 @@ import (
 
 type packageSymbols map[string]interface{}
 
+// _Plugin mirrors the memory layout of plugin.Plugin (see $GOROOT/src/plugin/plugin.go);
+// it must be kept in sync with the stdlib definition.
 type _Plugin struct {
 	path    string
-	_       chan struct{}
+	_       string        // err
+	_       chan struct{} // loaded
 	symbols packageSymbols
 }
 
