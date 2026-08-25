@@ -90,6 +90,8 @@ Usage of go-bind-plugin:
     	Rebuild plugin on every run
   -sha256
     	Write plugin's sha256 checksum to wrapper and validate it when loading it
+  -version
+    	Print version and exit
 ```
 
 ### Example

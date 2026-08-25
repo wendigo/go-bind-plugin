@@ -2,12 +2,38 @@ package main
 
 import (
 	"flag"
-	"os"
-
+	"fmt"
 	"log"
+	"os"
+	"runtime/debug"
 
 	"github.com/wendigo/go-bind-plugin/cli"
 )
+
+// set by goreleaser via ldflags
+var (
+	version = ""
+	commit  = ""
+	date    = ""
+)
+
+func versionString() string {
+	v := version
+
+	if v == "" {
+		v = "unknown"
+
+		if info, ok := debug.ReadBuildInfo(); ok && info.Main.Version != "" {
+			v = info.Main.Version
+		}
+	}
+
+	if commit != "" {
+		v = fmt.Sprintf("%s (commit %s, built %s)", v, commit, date)
+	}
+
+	return "go-bind-plugin " + v
+}
 
 func main() {
 	logger := log.New(os.Stderr, "go-bind-plugin ", log.Ltime)
@@ -26,9 +52,15 @@ func main() {
 	flagset.StringVar(&config.OutputPackage, "output-package", "main", "Output package (can be derived from output-path)")
 	flagset.BoolVar(&config.HideVariables, "hide-vars", false, "Do not export plugin variables")
 	flagset.BoolVar(&config.AsInterface, "interface", false, "Generate and return interface instead of struct (turns on -hide-vars)")
+	showVersion := flagset.Bool("version", false, "Print version and exit")
 
 	if err := flagset.Parse(os.Args[1:]); err != nil {
 		logger.Fatal(err)
+	}
+
+	if *showVersion {
+		fmt.Println(versionString())
+		return
 	}
 
 	cli, err := cli.New(config, logger)
