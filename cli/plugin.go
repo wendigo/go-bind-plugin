@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"os"
 	"plugin"
-	"sort"
+	"slices"
 	"strings"
 )
 
-type packageSymbols map[string]interface{}
+type packageSymbols map[string]any
 
 type pluginStructure struct {
 	Package string
@@ -27,17 +27,17 @@ type pluginStructure struct {
 func loadPlugin(path string, imports []string) (*pluginStructure, error) {
 	p, err := plugin.Open(path)
 	if err != nil {
-		return nil, fmt.Errorf("could not open plugin: %s", err)
+		return nil, fmt.Errorf("could not open plugin: %w", err)
 	}
 
 	stat, err := os.Stat(path)
 	if err != nil {
-		return nil, fmt.Errorf("could not stat file: %s", err)
+		return nil, fmt.Errorf("could not stat file: %w", err)
 	}
 
 	shaSum, err := fileChecksum(path)
 	if err != nil {
-		return nil, fmt.Errorf("could not calculate plugin checksum: %s", err)
+		return nil, fmt.Errorf("could not calculate plugin checksum: %w", err)
 	}
 
 	pluginPackage, symbols, err := pluginSymbols(p, path)
@@ -108,9 +108,7 @@ func (p *pluginStructure) imports() []string {
 		}
 	}
 
-	sort.Slice(ret, func(i, j int) bool {
-		return ret[i] < ret[j]
-	})
+	slices.Sort(ret)
 
 	return ret
 }

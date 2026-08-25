@@ -3,7 +3,7 @@ package cli
 import (
 	"fmt"
 	"reflect"
-	"sort"
+	"slices"
 	"strings"
 )
 
@@ -17,13 +17,13 @@ type function struct {
 }
 
 func (f *function) TrimmedSignature() string {
-	return strings.TrimLeft(f.FunctionHeader, "func ")
+	return strings.TrimPrefix(f.FunctionHeader, "func")
 }
 
 func (f *function) ArgumentsCall() string {
 	var arguments []string
 
-	for i := 0; i < f.ArgumentsCount; i++ {
+	for i := range f.ArgumentsCount {
 		if f.IsVariadic && i == f.ArgumentsCount-1 {
 			arguments = append(arguments, fmt.Sprintf("in%d...", i))
 		} else {
@@ -50,8 +50,8 @@ func (p *pluginStructure) analyzeFunctions() error {
 		}
 	}
 
-	sort.Slice(p.Functions, func(i, j int) bool {
-		return p.Functions[i].Name < p.Functions[j].Name
+	slices.SortFunc(p.Functions, func(a, b *function) int {
+		return strings.Compare(a.Name, b.Name)
 	})
 
 	return nil

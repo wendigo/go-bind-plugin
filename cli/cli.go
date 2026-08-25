@@ -1,7 +1,9 @@
 package cli
 
 import (
+	"errors"
 	"fmt"
+	"io/fs"
 	"log"
 	"os"
 	"os/exec"
@@ -127,14 +129,14 @@ func (c *Cli) GenerateFile() error {
 
 	if !c.pluginExists(c.config.PluginPath) || c.config.ForcePluginRebuild {
 		if err := c.buildPluginFromSources(c.config.PluginPath, c.config.PluginPackage); err != nil {
-			return fmt.Errorf("could not build plugin from sources: %s", err)
+			return fmt.Errorf("could not build plugin from sources: %w", err)
 		}
 	}
 
 	c.logger.Printf("Loading and analyzing plugin from: %s", c.config.PluginPath)
 	structure, err := loadPlugin(c.config.PluginPath, imports)
 	if err != nil {
-		return fmt.Errorf("could not load plugin from %s: %s", c.config.PluginPath, err)
+		return fmt.Errorf("could not load plugin from %s: %w", c.config.PluginPath, err)
 	}
 
 	if structure.SymbolsLen() == 0 {
@@ -148,7 +150,7 @@ func (c *Cli) GenerateFile() error {
 
 	outputFile, err := c.createOutputFile(c.config.OutputPath)
 	if err != nil {
-		return fmt.Errorf("could not create output file: %s", err)
+		return fmt.Errorf("could not create output file: %w", err)
 	}
 
 	tpl, err := template.New("generate").Parse(generateFileTemplate)
@@ -177,7 +179,7 @@ func (c *Cli) GenerateFile() error {
 	if c.config.FormatCode {
 		c.logger.Printf("Formatting generated file with gofmt -s -w %s", c.config.OutputPath)
 		if err := c.formatOutputCode(c.config.OutputPath); err != nil {
-			return fmt.Errorf("could not format output code: %s", err)
+			return fmt.Errorf("could not format output code: %w", err)
 		}
 	}
 
@@ -202,7 +204,7 @@ func (c *Cli) getOutputDirectory(path string) string {
 }
 
 func (c *Cli) createOutputDir(path string) error {
-	if info, err := os.Stat(path); err != nil && !os.IsNotExist(err) {
+	if info, err := os.Stat(path); err != nil && !errors.Is(err, fs.ErrNotExist) {
 		return err
 	} else if err == nil && !info.IsDir() {
 		return fmt.Errorf("output path %s exists and is not a directory", path)
@@ -224,7 +226,7 @@ func (c *Cli) createOutputFile(path string) (*os.File, error) {
 }
 
 func (c *Cli) pluginExists(path string) bool {
-	if _, err := os.Stat(path); err != nil && os.IsNotExist(err) {
+	if _, err := os.Stat(path); err != nil && errors.Is(err, fs.ErrNotExist) {
 		return false
 	}
 

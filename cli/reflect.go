@@ -31,7 +31,7 @@ func (p *pluginStructure) getVariableSignature(variable reflect.Type, isVariadic
 		return fmt.Sprintf("%s %s", variable.ChanDir().String(), p.getVariableSignature(variable.Elem(), false))
 	case reflect.Map:
 		return fmt.Sprintf("map[%s]%s", p.getVariableSignature(variable.Key(), false), p.getVariableSignature(variable.Elem(), false))
-	case reflect.Ptr:
+	case reflect.Pointer:
 		return fmt.Sprintf("*%s", p.getVariableSignature(variable.Elem(), false))
 	}
 
@@ -79,7 +79,7 @@ func (p *pluginStructure) getFunctionSignature(fun reflect.Type, namedParams boo
 	var in []string
 	var out []string
 
-	for i := 0; i < fun.NumIn(); i++ {
+	for i := range fun.NumIn() {
 		if namedParams {
 			in = append(in, fmt.Sprintf("in%d %s", i, p.getVariableSignature(fun.In(i), fun.IsVariadic() && i == fun.NumIn()-1)))
 		} else {
@@ -87,7 +87,7 @@ func (p *pluginStructure) getFunctionSignature(fun reflect.Type, namedParams boo
 		}
 	}
 
-	for i := 0; i < fun.NumOut(); i++ {
+	for i := range fun.NumOut() {
 		out = append(out, p.getVariableSignature(fun.Out(i), false))
 	}
 

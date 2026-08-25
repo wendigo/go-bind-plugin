@@ -92,7 +92,7 @@ var (
     p, err := plugin.Open(path)
 
     if err != nil {
-      return nil, fmt.Errorf("could not open plugin: %s", err)
+      return nil, fmt.Errorf("could not open plugin: %w", err)
     }
     {{ if .Config.CheckSha256 }}
     fileChecksum := func(path string) (string, error) {
@@ -125,7 +125,7 @@ var (
     {{range .Plugin.Functions}}
     func{{ .Name }}, err := p.Lookup("{{ .Name }}")
     if err != nil {
-      return nil, fmt.Errorf("could not import function '{{ .Name }}', symbol not found: %s", err)
+      return nil, fmt.Errorf("could not import function '{{ .Name }}', symbol not found: %w", err)
     }
 
     if typed, ok := func{{ .Name }}.({{ .Signature }}); ok {
@@ -138,7 +138,7 @@ var (
     {{range .Plugin.Variables}}
     var{{ .Name }}, err := p.Lookup("{{ .Name }}")
     if err != nil {
-      return nil, fmt.Errorf("could not import variable '{{ .Name }}', symbol not found: %s", err)
+      return nil, fmt.Errorf("could not import variable '{{ .Name }}', symbol not found: %w", err)
     }
 
     if typed, ok := var{{ .Name }}.(*{{.Signature}}); ok {

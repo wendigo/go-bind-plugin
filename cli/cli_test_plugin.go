@@ -4,8 +4,8 @@
 //
 // Plugin plugin.so info:
 // - package: github.com/wendigo/go-bind-plugin/cli/internal/test_fixtures/benchmark_plugin
-// - size: 2043618 bytes
-// - sha256: ec61bc1a315b0d16d42fea0a35c014b0d6a255b22105b872db755c1124b084de
+// - size: 2043730 bytes
+// - sha256: 2ee8a02ec81da516374e2dd4a3be27f84e85e2189b17c827e0c73667f5338b8c
 
 package cli
 
@@ -41,8 +41,8 @@ func (p *BenchmarkPlugin) String() string {
 	lines = append(lines, "\t- Command: go-bind-plugin -plugin-path plugin.so -plugin-package ./internal/test_fixtures/benchmark_plugin -output-name BenchmarkPlugin -output-path cli_test_plugin.go -output-package cli -rebuild")
 	lines = append(lines, "\nPlugin info:")
 	lines = append(lines, "\t- package: github.com/wendigo/go-bind-plugin/cli/internal/test_fixtures/benchmark_plugin")
-	lines = append(lines, "\t- sha256 sum: ec61bc1a315b0d16d42fea0a35c014b0d6a255b22105b872db755c1124b084de")
-	lines = append(lines, "\t- size: 2043618 bytes")
+	lines = append(lines, "\t- sha256 sum: 2ee8a02ec81da516374e2dd4a3be27f84e85e2189b17c827e0c73667f5338b8c")
+	lines = append(lines, "\t- size: 2043730 bytes")
 	lines = append(lines, "\nExported functions (1):")
 	lines = append(lines, "\t- Sum func([]uint64) (uint64)")
 
@@ -55,14 +55,14 @@ func BindBenchmarkPlugin(path string) (*BenchmarkPlugin, error) {
 	p, err := plugin.Open(path)
 
 	if err != nil {
-		return nil, fmt.Errorf("could not open plugin: %s", err)
+		return nil, fmt.Errorf("could not open plugin: %w", err)
 	}
 
 	ret := new(BenchmarkPlugin)
 
 	funcSum, err := p.Lookup("Sum")
 	if err != nil {
-		return nil, fmt.Errorf("could not import function 'Sum', symbol not found: %s", err)
+		return nil, fmt.Errorf("could not import function 'Sum', symbol not found: %w", err)
 	}
 
 	if typed, ok := funcSum.(func([]uint64) uint64); ok {

@@ -5,7 +5,7 @@ import (
 	"debug/macho"
 	"fmt"
 	"plugin"
-	"sort"
+	"slices"
 	"strings"
 	"unicode"
 )
@@ -21,7 +21,7 @@ import (
 func pluginSymbols(p *plugin.Plugin, path string) (string, packageSymbols, error) {
 	names, err := sharedObjectSymbols(path)
 	if err != nil {
-		return "", nil, fmt.Errorf("could not read plugin symbol table: %s", err)
+		return "", nil, fmt.Errorf("could not read plugin symbol table: %w", err)
 	}
 
 	pkg, symbols := resolveSymbols(names, p.Lookup)
@@ -68,7 +68,7 @@ func resolveSymbols(names []string, lookup func(string) (plugin.Symbol, error)) 
 	for pkg := range resolved {
 		packages = append(packages, pkg)
 	}
-	sort.Strings(packages)
+	slices.Sort(packages)
 
 	var pluginPackage string
 	for _, pkg := range packages {

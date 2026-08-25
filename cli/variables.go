@@ -2,7 +2,8 @@ package cli
 
 import (
 	"reflect"
-	"sort"
+	"slices"
+	"strings"
 )
 
 type variable struct {
@@ -17,7 +18,7 @@ func (p *pluginStructure) analyzeVariables() error {
 		typ := reflect.TypeOf(pointer)
 
 		// variables are always pointers
-		if typ.Kind() == reflect.Ptr {
+		if typ.Kind() == reflect.Pointer {
 			p.Variables = append(p.Variables, &variable{
 				Name:      name,
 				Typ:       typ.Elem().String(),
@@ -26,8 +27,8 @@ func (p *pluginStructure) analyzeVariables() error {
 		}
 	}
 
-	sort.Slice(p.Variables, func(i, j int) bool {
-		return p.Variables[i].Name < p.Variables[j].Name
+	slices.SortFunc(p.Variables, func(a, b *variable) int {
+		return strings.Compare(a.Name, b.Name)
 	})
 
 	return nil
