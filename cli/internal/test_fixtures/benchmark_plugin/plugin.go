@@ -10,3 +10,7 @@ func Sum(vals []uint64) uint64 {
 
 	return sum
 }
+
+// main is never called; it exists so the package also compiles with the
+// default buildmode (go build ./...), not only with -buildmode=plugin.
+func main() {}

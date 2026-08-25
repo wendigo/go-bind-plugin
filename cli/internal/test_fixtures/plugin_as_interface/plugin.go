@@ -24,3 +24,7 @@ func NonReturningFunction() {
 
 // X should not be exported in the interface
 var X = "Should not be exported"
+
+// main is never called; it exists so the package also compiles with the
+// default buildmode (go build ./...), not only with -buildmode=plugin.
+func main() {}

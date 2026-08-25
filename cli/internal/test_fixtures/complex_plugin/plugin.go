@@ -74,3 +74,7 @@ var X = http2.Work{Work: "Hello world!"}
 
 // Y is only exported for testing purposes
 var Y = &http2.Work{Work: "Hello"}
+
+// main is never called; it exists so the package also compiles with the
+// default buildmode (go build ./...), not only with -buildmode=plugin.
+func main() {}

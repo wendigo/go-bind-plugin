@@ -21,3 +21,7 @@ func ReturningIntArray() [3]int32 {
 func NonReturningFunction() {
 	fmt.Println("I'm not returning anything")
 }
+
+// main is never called; it exists so the package also compiles with the
+// default buildmode (go build ./...), not only with -buildmode=plugin.
+func main() {}

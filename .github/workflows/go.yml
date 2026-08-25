@@ -37,10 +37,10 @@ jobs:
           fi
 
       - name: Build
-        run: go build -v .
+        run: go build ./...
 
       - name: Vet
-        run: go vet . ./cli
+        run: go vet ./...
 
       - name: Test
         run: go test -v -coverprofile=coverage.out ./cli
