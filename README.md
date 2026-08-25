@@ -1,12 +1,12 @@
-# go-bind-plugin [![Build Status](https://travis-ci.org/wendigo/go-bind-plugin.svg?branch=master)](https://travis-ci.org/wendigo/go-bind-plugin)&nbsp;[![Coverage Status](https://coveralls.io/repos/github/wendigo/go-bind-plugin/badge.svg?branch=master)](https://coveralls.io/github/wendigo/go-bind-plugin?branch=master)&nbsp;[![GoDoc](https://godoc.org/github.com/wendigo/go-bind-plugin/cli?status.svg)](https://godoc.org/github.com/wendigo/go-bind-plugin/cli)&nbsp;[![Go Report Card](https://goreportcard.com/badge/github.com/wendigo/go-bind-plugin)](https://goreportcard.com/report/github.com/wendigo/go-bind-plugin)&nbsp;[![Say thanks!](https://img.shields.io/badge/SayThanks.io-%E2%98%BC-1EAEDB.svg)](https://saythanks.io/to/wendigo)
+# go-bind-plugin [![CI](https://github.com/wendigo/go-bind-plugin/actions/workflows/go.yml/badge.svg)](https://github.com/wendigo/go-bind-plugin/actions/workflows/go.yml)&nbsp;[![Coverage Status](https://coveralls.io/repos/github/wendigo/go-bind-plugin/badge.svg?branch=master)](https://coveralls.io/github/wendigo/go-bind-plugin?branch=master)&nbsp;[![Go Reference](https://pkg.go.dev/badge/github.com/wendigo/go-bind-plugin/cli.svg)](https://pkg.go.dev/github.com/wendigo/go-bind-plugin/cli)&nbsp;[![Go Report Card](https://goreportcard.com/badge/github.com/wendigo/go-bind-plugin)](https://goreportcard.com/report/github.com/wendigo/go-bind-plugin)&nbsp;[![Say thanks!](https://img.shields.io/badge/SayThanks.io-%E2%98%BC-1EAEDB.svg)](https://saythanks.io/to/wendigo)
 
 > TL;DR: See end-to-end example in [go-bind-plugin-example](https://github.com/wendigo/go-bind-plugin-example).
 
-**go-bind-plugin** is `go:generate` tool for building [golang 1.8 plugins](https://tip.golang.org/pkg/plugin) and generating wrappers around exported symbols (functions and variables).
+**go-bind-plugin** is `go:generate` tool for building [go plugins](https://pkg.go.dev/plugin) and generating wrappers around exported symbols (functions and variables).
 
 ## What is it?
 
-**go-bind-plugin** generates neat API around symbols exported by a `*.so` plugin built with `go build -buildmode=plugin` in upcoming go 1.8. [plugin.Plugin](https://tip.golang.org/pkg/plugin/#Plugin) holds information about exported symbols as `map[string]interface{}`.
+**go-bind-plugin** generates neat API around symbols exported by a `*.so` plugin built with `go build -buildmode=plugin`. [plugin.Plugin](https://pkg.go.dev/plugin#Plugin) holds information about exported symbols as `map[string]interface{}`.
 
 **go-bind-plugins** uses reflection to find out actual types of symbols and generates typed API wrapping plugin with additional functionalities (like dereferencing exported variables and checking SHA256 sum).
 
@@ -64,7 +64,7 @@ fmt.Println(plug.BuildVersion) // or fmt.Println(*plug.BuildVersion) if -derefer
 ## Usage
 
 ```go
-go get -u github.com/wendigo/go-bind-plugin
+go install github.com/wendigo/go-bind-plugin@latest
 go-bind-plugin -help
 
 Usage of go-bind-plugin:
@@ -99,7 +99,7 @@ Usage of go-bind-plugin:
 
 **go-bind-plugin** will do following things on invocation:
 
-- build plugin to `tmp/plugin.so` (even if plugin exists it will be rebuilded) from `github.com/plugin_test/plug` source (must exist in $GOPATH or vendor/)
+- build plugin to `tmp/plugin.so` (even if plugin exists it will be rebuilded) from `github.com/plugin_test/plug` source (must be resolvable as a package path from the current module)
 - generate wrapper struct `wrapper.TestPlugin` in `tmp/plugin.go`
 - dereference variables in the generated wrapper
 - format generated wrapper with `gofmt -s -w`
