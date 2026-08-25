@@ -3,12 +3,16 @@ version: 2
 builds:
   - binary: go-bind-plugin
     env:
-      # plugin.Open requires cgo, so the binary is built natively per-platform
-      - CGO_ENABLED=1
+      # Release binaries are cgo-free: source-based analysis (-plugin-package)
+      # is fully supported; loading a plugin (.so-only mode) requires a binary
+      # built with the same toolchain as the plugin — use go install for that.
+      - CGO_ENABLED=0
     goos:
       - linux
+      - darwin
     goarch:
       - amd64
+      - arm64
 
 archives:
   - formats: [tar.gz]

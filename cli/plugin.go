@@ -27,7 +27,7 @@ type pluginStructure struct {
 func loadPlugin(path string, imports []string) (*pluginStructure, error) {
 	p, err := plugin.Open(path)
 	if err != nil {
-		return nil, fmt.Errorf("could not open plugin: %w", err)
+		return nil, fmt.Errorf("could not open plugin: %w (loading a plugin requires a cgo-enabled go-bind-plugin built with the same toolchain as the plugin; pass -plugin-package to analyze plugin sources instead)", err)
 	}
 
 	stat, err := os.Stat(path)

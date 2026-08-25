@@ -63,6 +63,8 @@ fmt.Println(plug.BuildVersion) // or fmt.Println(*plug.BuildVersion) if -derefer
 
 ## Usage
 
+Prebuilt binaries for Linux and macOS (x86_64 and arm64) are available on the [releases page](https://github.com/wendigo/go-bind-plugin/releases). They are built without cgo: generating from sources (`-plugin-package`) is fully supported, but loading an existing `*.so` (`-plugin-path` only) requires a binary built with the same toolchain as the plugin — install it with `go install` for that mode:
+
 ```go
 go install github.com/wendigo/go-bind-plugin@latest
 go-bind-plugin -help
