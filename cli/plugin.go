@@ -6,19 +6,9 @@ import (
 	"plugin"
 	"sort"
 	"strings"
-	"unsafe"
 )
 
 type packageSymbols map[string]interface{}
-
-// _Plugin mirrors the memory layout of plugin.Plugin (see $GOROOT/src/plugin/plugin.go);
-// it must be kept in sync with the stdlib definition.
-type _Plugin struct {
-	path    string
-	_       string        // err
-	_       chan struct{} // loaded
-	symbols packageSymbols
-}
 
 type pluginStructure struct {
 	Package string
@@ -50,11 +40,14 @@ func loadPlugin(path string, imports []string) (*pluginStructure, error) {
 		return nil, fmt.Errorf("could not calculate plugin checksum: %s", err)
 	}
 
-	plug := (*_Plugin)(unsafe.Pointer(p))
+	pluginPackage, symbols, err := pluginSymbols(p, path)
+	if err != nil {
+		return nil, err
+	}
 
 	ps := &pluginStructure{
-		Symbols:      plug.symbols,
-		Package:      plug.path,
+		Symbols:      symbols,
+		Package:      pluginPackage,
 		Size:         stat.Size(),
 		Sha256:       shaSum,
 		importsNames: map[string]string{},
