@@ -51,7 +51,7 @@ func (p *{{if $interface}}_{{end}}{{$receiver}}) {{.Name}}{{.TrimmedSignature}} 
 }
 {{end}}
 
-// String returnes textual representation of the wrapper. It provides info on exported symbols and variables.
+// String returns textual representation of the wrapper. It provides info on exported symbols and variables.
 func (p *{{if $interface}}_{{end}}{{$receiver}}) String() string {
   var lines []string
   lines = append(lines, "{{if $interface}}Interface{{else}}Struct{{end}} {{.Config.OutputName}}:")
@@ -86,8 +86,8 @@ var (
 {{end}}
 
 // Bind{{.Config.OutputName}} loads plugin from the given path and binds {{if .Config.AsInterface}}functions{{else}}symbols (variables and functions){{end}}
-// to the {{if .Config.AsInterface}}struct implementing {{.Config.OutputName}} interface{{else}}{{.Config.OutputName}} struct{{end}}. {{if .Config.HideVariables | not}}{{if .Config.DereferenceVariables}}All variables are derefenenced. {{end}}{{end}}
-{{ if .Config.CheckSha256 }}// When plugin is loaded sha256 checksum is computed and checked against precomputed once. On mismatch error is returned.
+// to the {{if .Config.AsInterface}}struct implementing {{.Config.OutputName}} interface{{else}}{{.Config.OutputName}} struct{{end}}. {{if .Config.HideVariables | not}}{{if .Config.DereferenceVariables}}All variables are dereferenced. {{end}}{{end}}
+{{ if .Config.CheckSha256 }}// When plugin is loaded sha256 checksum is computed and checked against the precomputed one. On mismatch error is returned.
 {{end}}func Bind{{.Config.OutputName}}(path string) ({{if.Config.AsInterface|not}}*{{end}}{{.Config.OutputName}}, error) {
     p, err := plugin.Open(path)
 

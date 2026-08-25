@@ -5,7 +5,7 @@
 // Plugin plugin.so info:
 // - package: github.com/wendigo/go-bind-plugin/cli/internal/test_fixtures/benchmark_plugin
 // - size: 2043730 bytes
-// - sha256: 2ee8a02ec81da516374e2dd4a3be27f84e85e2189b17c827e0c73667f5338b8c
+// - sha256: 9da98f1e1202beec96a75411581e36db67327cbd0b556bb743ef75bb6824d1a4
 
 package cli
 
@@ -34,14 +34,14 @@ func (p *BenchmarkPlugin) Sum(in0 []uint64) uint64 {
 	return p._Sum(in0)
 }
 
-// String returnes textual representation of the wrapper. It provides info on exported symbols and variables.
+// String returns textual representation of the wrapper. It provides info on exported symbols and variables.
 func (p *BenchmarkPlugin) String() string {
 	var lines []string
 	lines = append(lines, "Struct BenchmarkPlugin:")
 	lines = append(lines, "\t- Command: go-bind-plugin -plugin-path plugin.so -plugin-package ./internal/test_fixtures/benchmark_plugin -output-name BenchmarkPlugin -output-path cli_test_plugin.go -output-package cli -rebuild")
 	lines = append(lines, "\nPlugin info:")
 	lines = append(lines, "\t- package: github.com/wendigo/go-bind-plugin/cli/internal/test_fixtures/benchmark_plugin")
-	lines = append(lines, "\t- sha256 sum: 2ee8a02ec81da516374e2dd4a3be27f84e85e2189b17c827e0c73667f5338b8c")
+	lines = append(lines, "\t- sha256 sum: 9da98f1e1202beec96a75411581e36db67327cbd0b556bb743ef75bb6824d1a4")
 	lines = append(lines, "\t- size: 2043730 bytes")
 	lines = append(lines, "\nExported functions (1):")
 	lines = append(lines, "\t- Sum func([]uint64) (uint64)")

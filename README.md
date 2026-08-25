@@ -99,7 +99,7 @@ Usage of go-bind-plugin:
 
 **go-bind-plugin** will do following things on invocation:
 
-- build plugin to `tmp/plugin.so` (even if plugin exists it will be rebuilded) from `github.com/plugin_test/plug` source (must be resolvable as a package path from the current module)
+- build plugin to `tmp/plugin.so` (even if plugin exists it will be rebuilt) from `github.com/plugin_test/plug` source (must be resolvable as a package path from the current module)
 - generate wrapper struct `wrapper.TestPlugin` in `tmp/plugin.go`
 - dereference variables in the generated wrapper
 - format generated wrapper with `gofmt -s -w`
