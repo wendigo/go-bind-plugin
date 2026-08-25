@@ -1,14 +1,19 @@
+version: 2
+
 builds:
   - binary: go-bind-plugin
+    env:
+      # plugin.Open requires cgo, so the binary is built natively per-platform
+      - CGO_ENABLED=1
     goos:
       - linux
     goarch:
       - amd64
 
-archive:
-  format: tar.gz
-  replacements:
-    amd64: x86_64
-  files:
-    - LICENSE
-    - README.md
+archives:
+  - formats: [tar.gz]
+    name_template: >-
+      {{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ if eq .Arch "amd64" }}x86_64{{ else }}{{ .Arch }}{{ end }}
+    files:
+      - LICENSE
+      - README.md
