@@ -9,8 +9,8 @@ import (
 	"os/exec"
 	"strings"
 	"testing"
+	"text/template"
 
-	"github.com/alecthomas/template"
 	"github.com/wendigo/go-bind-plugin/cli"
 )
 
