@@ -139,10 +139,21 @@ func (c *Cli) GenerateFile() error {
 		}
 	}
 
-	c.logger.Printf("Loading and analyzing plugin from: %s", c.config.PluginPath)
-	structure, err := loadPlugin(c.config.PluginPath, imports)
-	if err != nil {
-		return fmt.Errorf("could not load plugin from %s: %w", c.config.PluginPath, err)
+	var structure *pluginStructure
+	var err error
+
+	if c.config.PluginPackage != "" {
+		c.logger.Printf("Analyzing plugin source package: %s", c.config.PluginPackage)
+		structure, err = analyzeSource(c.config.PluginPackage, c.config.PluginPath, imports)
+		if err != nil {
+			return fmt.Errorf("could not analyze package %s: %w", c.config.PluginPackage, err)
+		}
+	} else {
+		c.logger.Printf("Loading and analyzing plugin from: %s", c.config.PluginPath)
+		structure, err = loadPlugin(c.config.PluginPath, imports)
+		if err != nil {
+			return fmt.Errorf("could not load plugin from %s: %w", c.config.PluginPath, err)
+		}
 	}
 
 	if structure.SymbolsLen() == 0 {

@@ -8,7 +8,7 @@
 
 **go-bind-plugin** generates neat API around symbols exported by a `*.so` plugin built with `go build -buildmode=plugin`. [plugin.Plugin](https://pkg.go.dev/plugin#Plugin) holds information about exported symbols as `map[string]interface{}`.
 
-**go-bind-plugins** uses reflection to find out actual types of symbols and generates typed API wrapping plugin with additional functionalities (like dereferencing exported variables and checking SHA256 sum).
+**go-bind-plugin** discovers actual types of exported symbols by type-checking the plugin's sources (when `-plugin-package` is provided) or by loading the plugin and using reflection (when only `-plugin-path` is provided), and generates typed API wrapping plugin with additional functionalities (like dereferencing exported variables and checking SHA256 sum).
 
 *Note: Basic usage does not require plugin sources as wrapper can be generated using only* `*.so` *file.*
 
@@ -83,7 +83,7 @@ Usage of go-bind-plugin:
   -output-path string
     	Output file path (default "plugin_api.go")
   -plugin-package string
-    	Plugin package url (as accepted by go get)
+    	Plugin package (as accepted by go build); enables source-based analysis
   -plugin-path string
     	Path to plugin (.so file)
   -rebuild

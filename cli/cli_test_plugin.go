@@ -5,7 +5,7 @@
 // Plugin plugin.so info:
 // - package: github.com/wendigo/go-bind-plugin/cli/internal/test_fixtures/benchmark_plugin
 // - size: 2043730 bytes
-// - sha256: 9da98f1e1202beec96a75411581e36db67327cbd0b556bb743ef75bb6824d1a4
+// - sha256: a5887de64408edafe5ddffc5780e4292c6763042eef52bd630cbca697251e959
 
 package cli
 
@@ -41,7 +41,7 @@ func (p *BenchmarkPlugin) String() string {
 	lines = append(lines, "\t- Command: go-bind-plugin -plugin-path plugin.so -plugin-package ./internal/test_fixtures/benchmark_plugin -output-name BenchmarkPlugin -output-path cli_test_plugin.go -output-package cli -rebuild")
 	lines = append(lines, "\nPlugin info:")
 	lines = append(lines, "\t- package: github.com/wendigo/go-bind-plugin/cli/internal/test_fixtures/benchmark_plugin")
-	lines = append(lines, "\t- sha256 sum: 9da98f1e1202beec96a75411581e36db67327cbd0b556bb743ef75bb6824d1a4")
+	lines = append(lines, "\t- sha256 sum: a5887de64408edafe5ddffc5780e4292c6763042eef52bd630cbca697251e959")
 	lines = append(lines, "\t- size: 2043730 bytes")
 	lines = append(lines, "\nExported functions (1):")
 	lines = append(lines, "\t- Sum func([]uint64) (uint64)")

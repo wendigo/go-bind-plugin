@@ -16,7 +16,7 @@ func main() {
 	flagset := flag.NewFlagSet("go-bind-plugin", flag.ContinueOnError)
 
 	flagset.StringVar(&config.PluginPath, "plugin-path", "", "Path to plugin (.so file)")
-	flagset.StringVar(&config.PluginPackage, "plugin-package", "", "Plugin package url (as accepted by go get)")
+	flagset.StringVar(&config.PluginPackage, "plugin-package", "", "Plugin package (as accepted by go build); enables source-based analysis")
 	flagset.StringVar(&config.OutputName, "output-name", "PluginAPI", "Output struct name")
 	flagset.StringVar(&config.OutputPath, "output-path", "plugin_api.go", "Output file path")
 	flagset.BoolVar(&config.DereferenceVariables, "dereference-vars", false, "Dereference plugin variables")

@@ -79,6 +79,46 @@ func TestWillGenerateComplexPluginWithoutErrors(t *testing.T) {
 	}
 }
 
+func TestWillGenerateWrapperFromSharedObjectOnly(t *testing.T) {
+	pluginPath := "./internal/test_fixtures/generated/so_only/plugin.so"
+
+	if err := os.MkdirAll("./internal/test_fixtures/generated/so_only", 0700); err != nil {
+		t.Fatal(err)
+	}
+
+	build := exec.Command("go", "build", "-o", pluginPath, "-buildmode=plugin", "./internal/test_fixtures/basic_plugin")
+	build.Stderr = os.Stderr
+
+	if err := build.Run(); err != nil {
+		t.Fatalf("Could not build plugin: %s", err)
+	}
+
+	// PluginPackage is intentionally empty: symbols come from the shared object
+	config := cli.Config{
+		PluginPath:           pluginPath,
+		OutputPath:           "./internal/test_fixtures/generated/so_only/plugin.go",
+		FormatCode:           true,
+		CheckSha256:          true,
+		OutputPackage:        "main",
+		OutputName:           "TestWrapper",
+		DereferenceVariables: true,
+	}
+
+	if err := generatePluginWithCli(config, t); err != nil {
+		t.Fatalf("Expected error to be nil, actual: %s", err)
+	}
+
+	output, err := runPlugin("fmt.Println(pl.ReturningIntArray())", config.OutputPath, config)
+
+	if err != nil {
+		t.Fatalf("Expected err to be nil, actual: %s", err)
+	}
+
+	if !strings.Contains(output, "[1 0 1]") {
+		t.Fatalf("Expected output to contain [1 0 1], actual output:\n=======\n%s\n=======\n", output)
+	}
+}
+
 // Switch to generatePluginWithCli when https://github.com/golang/go/issues/17928 is solved
 func generatePluginWithCli(config cli.Config, t *testing.T) error {
 	client, err := cli.New(config, log.New(os.Stdout, "", 0))
