@@ -8,7 +8,6 @@ import (
 	"path/filepath"
 	"strings"
 	"text/template"
-	"time"
 )
 
 var wrapperImports = []string{
@@ -102,7 +101,6 @@ type Cli struct {
 }
 
 type buildInfo struct {
-	Date    string
 	Command string
 }
 
@@ -169,7 +167,6 @@ func (c *Cli) GenerateFile() error {
 		Config: c.config,
 		Plugin: *structure,
 		Build: buildInfo{
-			Date:    time.Now().String(),
 			Command: c.buildCommandArgs(),
 		},
 		OutputPackage: outputPackage,

@@ -127,7 +127,6 @@ Generated code passes both `go vet` and `golint` and can be formatted using `gof
 
 ```go
 Wrapper info:
-	- Generated on: 2016-11-08 16:15:07.513150982 +0100 CET
 	- Command: go-bind-plugin -plugin-path ./internal/test_fixtures/generated/basic_plugin/plugin.so -plugin-package ./internal/test_fixtures/basic_plugin -output-name TestWrapper -output-path ./internal/test_fixtures/generated/basic_plugin/plugin.go -output-package main -sha256 true -format true -rebuild true
 
 Plugin info:

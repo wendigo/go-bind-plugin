@@ -2,7 +2,7 @@ package cli
 
 import "testing"
 
-//go:generate go-bind-plugin -plugin-package ../internal/test_fixtures/benchmark_plugin -output-package cli -output-path cli_test_plugin.go -output-name BenchmarkPlugin
+//go:generate go run .. -plugin-package ./internal/test_fixtures/benchmark_plugin -output-package cli -output-path cli_test_plugin.go -output-name BenchmarkPlugin -rebuild
 func BenchmarkCallOverhead(b *testing.B) {
 	pl, err := BindBenchmarkPlugin("plugin.so")
 	numbers := 100
