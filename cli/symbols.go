@@ -5,6 +5,7 @@ import (
 	"debug/macho"
 	"fmt"
 	"plugin"
+	"sort"
 	"strings"
 	"unicode"
 )
@@ -23,6 +24,14 @@ func pluginSymbols(p *plugin.Plugin, path string) (string, packageSymbols, error
 		return "", nil, fmt.Errorf("could not read plugin symbol table: %s", err)
 	}
 
+	pkg, symbols := resolveSymbols(names, p.Lookup)
+
+	return pkg, symbols, nil
+}
+
+// resolveSymbols implements the package election described on pluginSymbols;
+// lookup resolves a bare symbol name within the plugin's own package.
+func resolveSymbols(names []string, lookup func(string) (plugin.Symbol, error)) (string, packageSymbols) {
 	candidates := make(map[string][]string)
 
 	for _, full := range names {
@@ -45,7 +54,7 @@ func pluginSymbols(p *plugin.Plugin, path string) (string, packageSymbols, error
 		symbols := packageSymbols{}
 
 		for _, name := range symbolNames {
-			if sym, err := p.Lookup(name); err == nil {
+			if sym, err := lookup(name); err == nil {
 				symbols[name] = sym
 			}
 		}
@@ -55,18 +64,24 @@ func pluginSymbols(p *plugin.Plugin, path string) (string, packageSymbols, error
 		}
 	}
 
+	packages := make([]string, 0, len(resolved))
+	for pkg := range resolved {
+		packages = append(packages, pkg)
+	}
+	sort.Strings(packages)
+
 	var pluginPackage string
-	for pkg, symbols := range resolved {
-		if pluginPackage == "" || len(symbols) > len(resolved[pluginPackage]) {
+	for _, pkg := range packages {
+		if pluginPackage == "" || len(resolved[pkg]) > len(resolved[pluginPackage]) {
 			pluginPackage = pkg
 		}
 	}
 
 	if pluginPackage == "" {
-		return "", packageSymbols{}, nil
+		return "", packageSymbols{}
 	}
 
-	return pluginPackage, resolved[pluginPackage], nil
+	return pluginPackage, resolved[pluginPackage]
 }
 
 // sharedObjectSymbols lists raw symbol names from an ELF or Mach-O shared object.
